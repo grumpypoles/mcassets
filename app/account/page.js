@@ -1,5 +1,4 @@
 import { auth } from "@/app/_lib/auth";
-import ChartWSCatList from "../_components/ChartWSCatList";
 
 export const metadata = {
   title: "Account",
@@ -16,7 +15,7 @@ export default async function Page() {
       </h1>
       <div className="grid grid-cols-1 gap-4 h-[100%]  ">
         <div className="col-span-2 ">
-          <ChartWSCatList />
+          {/* <ChartWSCatList /> */}
         </div>
       </div>
     </>

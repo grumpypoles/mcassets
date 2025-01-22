@@ -112,7 +112,7 @@ export default function NavDropDown() {
                 Categories
               </Link>
               <Link
-                href="/account/admin/disciplines"
+                href="/account/admin/locations"
                 className="block px-6 py-2 hover:bg-primary-900"
                 onClick={closeDropdown}
               >

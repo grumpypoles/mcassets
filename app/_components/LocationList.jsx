@@ -1,20 +1,24 @@
-import { getLocations, getSport } from "@/app/_lib/data-service";
-import { auth } from "@/app/_lib/auth";
 import LocationGrid from "@/app/_components/LocationGrid";
+import connectDB from "@/app/_config/database";
+import LocationCategories from "@/app/_models/HI_Locations";
 
 async function LocationList() {
-  const session = await auth();
-  const beaches = await getLocations(session.user.appUserId);
-  const sports = await getSport();
+  await connectDB();
+  const categories = await LocationCategories.find({}).sort({ code: 1 }).lean();
+
+  const categoriesData = categories.map((category) => ({
+    ...category,
+    _id: category._id.toString(),
+  }));
 
   return (
     <div>
-      {beaches.length === 0 ? (
+      {categoriesData.length === 0 ? (
         <h1 className="mb-5 text-3xl font-medium text-primary-500">
-          You don&apos;t have any beach spots yet.
+          You don&apos;t have any asset locations recorded yet.
         </h1>
       ) : (
-        <LocationGrid rowData={beaches} />
+        <LocationGrid rowData={categoriesData} />
       )}
     </div>
   );

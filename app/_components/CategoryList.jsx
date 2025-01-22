@@ -1,20 +1,24 @@
-import { auth } from "@/app/_lib/auth";
-import { getCategories } from "@/app/_lib/data-service";
 import CategoryGrid from "@/app/_components/CategoryGrid";
+import connectDB from "@/app/_config/database";
+import AssetCategories from "@/app/_models/HI_Categories";
 
 async function CategoryList() {
-  const session = await auth();
-  const ws_categories = await getCategories();
-  const { id, selcode, description } = ws_categories
+  await connectDB();
+  const categories = await AssetCategories.find({}).sort({ code: 1 }).lean();
+
+  const categoriesData = categories.map((category) => ({
+    ...category,
+    _id: category._id.toString(),
+  }));
 
   return (
     <div>
-      {ws_categories.length === 0 ? (
+      {categoriesData.length === 0 ? (
         <h1 className="mb-5 text-3xl font-medium text-primary-500">
-          You don&apos;t have any windsurfing categories recorded yet.
+          You don&apos;t have any asset categories recorded yet.
         </h1>
       ) : (
-        <CategoryGrid rowData={ws_categories} />
+        <CategoryGrid rowData={categoriesData} />
       )}
     </div>
   );

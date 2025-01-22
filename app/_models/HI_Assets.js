@@ -1,6 +1,6 @@
 import { Schema, model, models } from "mongoose";
 
-const HIAssetsSchema = new Schema(
+const HI_AssetsSchema = new Schema(
   {
     selcode: {
       type: String,
@@ -56,20 +56,16 @@ const HIAssetsSchema = new Schema(
           required: true,
         },
         location: {
-          type: String,
-          required: false,
+          type: String
         },
         amount: {
-          type: Double,
-          required: false,
+          type: Number
         },
         note: {
-          type: String,
-          required: false,
+          type: String
         },
         invoice: {
-          invoice: String,
-          required: false,
+          invoice: String
         },
       },
       disposal:{
@@ -78,16 +74,13 @@ const HIAssetsSchema = new Schema(
           required: true,
         },
         amount: {
-          type: Double,
-          required: false,
+          type: Number
         },
         note: {
-          type: String,
-          required: false,
+          type: String
         },
         invoice: {
-          invoice: String,
-          required: false,
+          type: String
         },
       },
     },
@@ -123,6 +116,6 @@ const HIAssetsSchema = new Schema(
 
 );
 
-const HIAssets = models.HIAssets || model("HIAssets", HIAssetsSchema);
+const HI_Assets = models.HI_Assets || model("HI_Assets", HI_AssetsSchema);
 
-export default HIAssets;
+export default HI_Assets;

@@ -3,14 +3,14 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 import { useTransition } from "react";
 import SpinnerMini from "@/app/_components/SpinnerMini";
-import { duplicateCategory } from "@/app/_lib/mongo_actions";
+import { duplicateLocation } from "@/app/_lib/mongo_actions";
 
-function DuplicateCategory({ copiedRow, onDelete }) {
+function DuplicateLocation({ copiedRow, onDelete }) {
   const [isPending, startTransition] = useTransition();
 
   function handleDuplicate() {
     if (confirm("Are you sure you want to duplicate this record?"))
-      startTransition(() => duplicateCategory(copiedRow));
+      startTransition(() => duplicateLocation(copiedRow));
     
   }
 
@@ -32,4 +32,4 @@ function DuplicateCategory({ copiedRow, onDelete }) {
   );
 }
 
-export default DuplicateCategory;
+export default DuplicateLocation;

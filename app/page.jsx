@@ -10,7 +10,7 @@ export default function Page() {
         placeholder="blur"
         quality={80}
         className="object-cover object-top"
-        alt="Wild ocean waves in black and white"
+        alt="House in the winter with snow"
       />
       <div className="absolute inset-0 bg-black bg-opacity-75"></div>
       <div className="relative text-center">

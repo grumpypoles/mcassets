@@ -17,7 +17,7 @@ export const metadata = {
     default: "Welcome: McAssets",
   },
   description:
-   "Windsurfing: The Way of Life is a unique application designed to help us stay fit through windsurfing and SUP activities, without overdoing it. The app allows us to easily record and track our sessions while also managing our ocean equipment inventory."
+   "Assets: is a unique application designed to easily record and track and manage our home assets inventory."
 };
 
 export default function RootLayout({ children }) {
