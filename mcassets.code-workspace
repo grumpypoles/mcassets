@@ -2,15 +2,6 @@
 	"folders": [
 		{
 			"path": "."
-		},
-		{
-			"path": "../mcwoyage-react"
-		},
-		{
-			"path": "../mcactive"
-		},
-		{
-			"path": "../property-pulse"
 		}
 	],
 	"settings": {}

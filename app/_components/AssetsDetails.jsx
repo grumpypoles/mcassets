@@ -4,8 +4,10 @@ import Link from "next/link";
 
 function AssetsDetails({ copiedRow }) {
 
+  console.log(copiedRow)
+
 // Ensure copiedRow and copiedRow.id exist
-if (!copiedRow || !copiedRow.id) {
+if (!copiedRow || !copiedRow._id) {
   return null; // Handle the case where copiedRow is not passed
 }
 
@@ -16,7 +18,7 @@ if (!copiedRow || !copiedRow.id) {
 
     
     <Link
-      href={`/hiassets/${copiedRow.id}`}
+      href={`/hiassets/${copiedRow._id}`}
       className="flex items-center mb-4 text-2xl font-semibold text-primary-300"
     >
       {" "}

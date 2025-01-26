@@ -1,14 +1,11 @@
 "use client";
 
-import { AgGridReact } from "ag-grid-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
-import { useMemo, useState } from "react";
-import DeleteTow from "@/app/_components/DeleteTow";
-import TowDetails from "@/app/_components/TowDetails";
-import TowEdit from "@/app/_components/TowEdit";
 import AssetsDetails from "@/app/_components/AssetsDetails";
 import AssetsEdit from "@/app/_components/AssetsEdit";
+import "ag-grid-community/styles/ag-grid.css";
+import "ag-grid-community/styles/ag-theme-quartz.css";
+import { AgGridReact } from "ag-grid-react";
+import { useMemo, useState } from "react";
 
 const EditRow = ({ data }) => (
   <>
@@ -26,13 +23,7 @@ const RowDetails = ({ data }) => (
   </>
 );
 
-// const DeleteRow = ({ data }) => (
-//   <>
-//     <div className="flex flex-col w-[100px]">
-//       <DeleteTow rowId={data.id} date={data.date} sport={data.sport}/>
-//     </div>
-//   </>
-// );
+
 
 const AssetsGrid = ({ rowData }) => {
   const defaultColDef = useMemo(
@@ -51,6 +42,7 @@ const AssetsGrid = ({ rowData }) => {
     { field: "card.model", headerName: "Model", minWidth: 200, filter: true, editable: false },
     { field: "technical.location", headerName: "Location", minWidth: 200, filter: true, editable: false },
     { field: "technical.category", headerName: "Category", filter: true, editable: false },
+    { field: "status", headerName: "Status", filter: true, editable: false },
     
     {
       field: "custom",

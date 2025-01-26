@@ -13,14 +13,14 @@ import { revalidatePath } from "next/cache";
 import delete_item from "@/app/_lib/delete_item";
 
 const Page = () => {
-  const { id } = useParams();
+  const { _id } = useParams();
   const [equipmentData, setEquipmentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
   useEffect(() => {
     const fetchEquipmentData = async () => {
-      if (!id) return;
+      if (!_id) return;
       try {
         const equipmentData = await getSail(id);
         setEquipmentData(equipmentData);
@@ -34,7 +34,7 @@ const Page = () => {
     if (equipmentData === null) {
       fetchEquipmentData();
     }
-  }, [id, equipmentData]);
+  }, [_id, equipmentData]);
 
   if (!equipmentData && !loading) {
     return (

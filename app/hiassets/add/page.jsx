@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
-import { Suspense } from "react";
+import AssetsForm from "@/app/_components/AssetsForm";
 import Spinner from "@/app/_components/Spinner";
-import SailsForm from "@/app/_components/SailsForm";
+import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
+import { Suspense } from "react";
 
 const Page = () => {
   return (
@@ -20,7 +20,7 @@ const Page = () => {
           </span>
         </Link>
 
-        <SailsForm equipment={null} edit={null} />
+        <AssetsForm equipment={null} edit={null} />
       </Suspense>
     </>
   );

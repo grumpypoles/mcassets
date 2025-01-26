@@ -6,8 +6,8 @@ import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import { Suspense } from "react";
 import Spinner from "@/app/_components/Spinner";
-import { getSail } from "@/app/_lib/actions_sails";
-import SailsForm from "@/app/_components/SailsForm";
+import { getAssets } from "@/app/_lib/mongo_actions";
+// import AssetsForm from "@/app/_components/AssetsForm";
 
 const Page = (params) => {
   const { id } = useParams();
@@ -19,10 +19,10 @@ const Page = (params) => {
     const fetchEquipmentData = async () => {
       if (!id) return;
       try {
-        const equipmentData = await getSail(id);
+        const equipmentData = await getAssets(id);
         setEquipmentData(equipmentData);
       } catch (error) {
-        console.error("Error fetching equipment technical Data:", error);
+        console.error("Error fetching Assets Data:", error);
       } finally {
         setLoading(false);
       }
@@ -55,16 +55,16 @@ const Page = (params) => {
         <>
           <Suspense fallback={<Spinner />}>
             <Link
-              href="/sails"
-              className="flex items-centermb-4 text-2xl font-semibold text-primary-300"
+              href="/hiassets"
+              className="flex text-2xl font-semibold items-centermb-4 text-primary-300"
             >
               {" "}
-              <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
-                <ArrowLongLeftIcon className="mr-2 h-6 w-6" /> Back to Sails
+              <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
+                <ArrowLongLeftIcon className="w-6 h-6 mr-2" /> Back to Sails
               </span>
             </Link>
 
-            <SailsForm equipment={equipmentData} edit={'edit'}/>
+            {/* <AssetsForm equipment={equipmentData} edit={'edit'}/> */}
           </Suspense>
           
         </>

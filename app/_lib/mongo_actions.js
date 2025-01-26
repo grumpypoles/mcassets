@@ -4,7 +4,30 @@ import { revalidatePath } from "next/cache";
 import connectDB from "@/app/_config/database";
 import AssetCategories from "@/app/_models/HI_Categories";
 import AssetLocations from "@/app/_models/HI_Locations";
+import HIAssets from "@/app/_models/HI_Assets";
 
+
+//Get all data for specific assets
+export async function getAssets(id) {
+  try {
+    // Ensure the id is valid for MongoDB ObjectId
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      throw new Error("Invalid ID format");
+    }
+
+    // Query the MongoDB collection using the model
+    const data = await HIAssets.findOne({ _id: id });
+
+    if (!data) {
+      throw new Error("Asset not found");
+    }
+
+    return data;
+  } catch (error) {
+    console.error(error);
+    throw new Error("Failed to retrieve asset");
+  }
+}
 
 // Category Actions
 
@@ -110,3 +133,5 @@ export async function duplicateLocation(params) {
       throw new Error("An error occurred while duplicating the location");
   }
 }
+
+
