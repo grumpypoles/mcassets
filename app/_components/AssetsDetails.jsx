@@ -4,7 +4,7 @@ import Link from "next/link";
 
 function AssetsDetails({ copiedRow }) {
 
-  console.log(copiedRow)
+ 
 
 // Ensure copiedRow and copiedRow.id exist
 if (!copiedRow || !copiedRow._id) {

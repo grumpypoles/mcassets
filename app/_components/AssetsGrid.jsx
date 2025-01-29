@@ -7,56 +7,33 @@ import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
 import { useMemo, useState } from "react";
 
-const EditRow = ({ data }) => (
-  <>
-    <div className="flex flex-col w-[100px]">
-      <AssetsDetails copiedRow={data} />
-    </div>
-  </>
-);
-
-const RowDetails = ({ data }) => (
-  <>
-    <div className="flex flex-col w-[100px]">
-      <AssetsEdit copiedRow={data} />
-    </div>
-  </>
-);
+const DetailRowRenderer = (params) => <AssetsDetails copiedRow={params.data} />;
+const EditRowRenderer = (params) => <AssetsEdit copiedRow={params.data} />;
 
 
 
 const AssetsGrid = ({ rowData }) => {
-  const defaultColDef = useMemo(
-    () => ({
-      flex: 1,
-      editable: false,
-    }),
-    []
-  );
-// console.log(rowData)
-  // const activitiesList = activities.map((item) => item.activity);
+  const defaultColDef = useMemo(() => ({ flex: 1, editable: false }), []);
 
   const [colDefs] = useState([
-    { field: "selcode", headerName: "Code", filter: true, editable: false },
-    { field: "card.description", headerName: "Description", minWidth: 200, filter: true, editable: false },
-    { field: "card.model", headerName: "Model", minWidth: 200, filter: true, editable: false },
-    { field: "technical.location", headerName: "Location", minWidth: 200, filter: true, editable: false },
-    { field: "technical.category", headerName: "Category", filter: true, editable: false },
-    { field: "status", headerName: "Status", filter: true, editable: false },
-    
+    { field: "selcode", headerName: "Code", filter: true },
+    { field: "card.description", headerName: "Description", minWidth: 200, filter: true },
+    { field: "card.model", headerName: "Model", minWidth: 200, filter: true },
+    { field: "technical.location", headerName: "Location", minWidth: 200, filter: true },
+    { field: "technical.category", headerName: "Category", filter: true },
+    { field: "status", headerName: "Status", filter: true },
     {
       field: "custom",
       headerName: "Details",
       maxWidth: 125,
-      cellRenderer: (params) => <EditRow data={params.data} />,
+      cellRenderer: DetailRowRenderer,
     },
     {
       field: "custom",
       headerName: "Edit",
       maxWidth: 125,
-      cellRenderer: (params) => <RowDetails data={params.data} />,
-    }
-  
+      cellRenderer: EditRowRenderer,
+    },
   ]);
 
   return (
@@ -66,7 +43,7 @@ const AssetsGrid = ({ rowData }) => {
         columnDefs={colDefs}
         pagination={true}
         paginationPageSize={10}
-        paginationPageSizeSelector={[10, 20]}
+        paginationPageSizeSelector={[10, 20, 30, 50, 100, 200]}
         defaultColDef={defaultColDef}
       />
     </div>

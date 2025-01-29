@@ -118,19 +118,7 @@ export default function NavDropDown() {
               >
                 Location
               </Link>
-              {/* <Link
-                href="/account/admin/disciplines"
-                className="block px-6 py-2 hover:bg-primary-900"
-                onClick={closeDropdown}
-              >
-                Booms
-              </Link>
-              <Link
-                href="/sundry"
-                className="block px-6 py-2 hover:bg-primary-900"
-              >
-                Sundry
-              </Link> */}
+              
             </div>
           </div>
         </div>

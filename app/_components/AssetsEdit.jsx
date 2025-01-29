@@ -6,7 +6,7 @@ import Link from "next/link";
 function AssetsEdit({ copiedRow, onDelete }) {
   return (
     <Link
-      href={`/tow/${copiedRow.id}/edit`}
+      href={`/hiassets/${copiedRow._id}/edit`}
       className="flex items-center mb-4 text-2xl font-semibold text-primary-300"
     >
       {" "}

@@ -41,36 +41,11 @@ const navSubLinks = [
     icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
   },
   {
-    name: "Disciplines",
-    href: "/account/admin/disciplines",
+    name: "Locations",
+    href: "/account/admin/locations",
     icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
   },
-  {
-    name: "Wind Power",
-    href: "/account/admin/windpower",
-    icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
-  },
- 
-  {
-    name: "Wind Directions",
-    href: "/account/admin/winddirection",
-    icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
-  },
-  {
-    name: "Ocean Swell",
-    href: "/account/admin/swell",
-    icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
-  },
-  {
-    name: "Ocean Sports",
-    href: "/account/admin/sports",
-    icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
-  },
-  {
-    name: "Ocean Locations",
-    href: "/locations",
-    icon: <WrenchIcon className="w-5 h-5 text-primary-600" />,
-  },
+  
  
   
   ];

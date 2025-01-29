@@ -66,6 +66,7 @@ const CategoryGrid = ({ rowData }) => {
         tooltipShowDelay={500}
         pagination={true}
         paginationPageSize={7}
+        paginationPageSizeSelector={[7, 14, 21]}
         defaultColDef={defaultColDef}
         onCellValueChanged={handleCellValueChange}
       />

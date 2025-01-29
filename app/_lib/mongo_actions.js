@@ -5,10 +5,13 @@ import connectDB from "@/app/_config/database";
 import AssetCategories from "@/app/_models/HI_Categories";
 import AssetLocations from "@/app/_models/HI_Locations";
 import HIAssets from "@/app/_models/HI_Assets";
-
+import mongoose from "mongoose";
+import { ObjectId } from "mongodb";
 
 //Get all data for specific assets
 export async function getAssets(id) {
+  await connectDB();
+
   try {
     // Ensure the id is valid for MongoDB ObjectId
     if (!mongoose.Types.ObjectId.isValid(id)) {
@@ -16,8 +19,9 @@ export async function getAssets(id) {
     }
 
     // Query the MongoDB collection using the model
-    const data = await HIAssets.findOne({ _id: id });
 
+    const data = await HIAssets.findById(id).lean();
+    // console.log("Query Result:", data);
     if (!data) {
       throw new Error("Asset not found");
     }
@@ -58,7 +62,6 @@ export async function updateCategory(params) {
   }
 }
 
-
 export async function duplicateCategory(params) {
   await connectDB();
 
@@ -68,17 +71,17 @@ export async function duplicateCategory(params) {
   const updateData = { code, description };
 
   try {
-      const result = await AssetCategories.create(updateData);
+    const result = await AssetCategories.create(updateData);
 
-      if (!result) {
-          throw new Error("Asset category could not be duplicated");
-      }
+    if (!result) {
+      throw new Error("Asset category could not be duplicated");
+    }
 
-      // Trigger revalidation only if the update is successful
-      revalidatePath("/account/admin/categories");
+    // Trigger revalidation only if the update is successful
+    revalidatePath("/account/admin/categories");
   } catch (error) {
-      console.error("Error duplicating category:", error);
-      throw new Error("An error occurred while duplicating the category");
+    console.error("Error duplicating category:", error);
+    throw new Error("An error occurred while duplicating the category");
   }
 }
 
@@ -120,18 +123,16 @@ export async function duplicateLocation(params) {
   const updateData = { code, description };
 
   try {
-      const result = await AssetLocations.create(updateData);
+    const result = await AssetLocations.create(updateData);
 
-      if (!result) {
-          throw new Error("Asset location could not be duplicated");
-      }
+    if (!result) {
+      throw new Error("Asset location could not be duplicated");
+    }
 
-      // Trigger revalidation only if the update is successful
-      revalidatePath("/account/admin/locations");
+    // Trigger revalidation only if the update is successful
+    revalidatePath("/account/admin/locations");
   } catch (error) {
-      console.error("Error duplicating location:", error);
-      throw new Error("An error occurred while duplicating the location");
+    console.error("Error duplicating location:", error);
+    throw new Error("An error occurred while duplicating the location");
   }
 }
-
-

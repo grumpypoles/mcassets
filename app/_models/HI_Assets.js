@@ -1,7 +1,7 @@
 import { Schema, model, models } from "mongoose";
 
 const HI_AssetsSchema = new Schema(
-  {
+  { 
     selcode: {
       type: String,
       required: true,
@@ -79,9 +79,7 @@ const HI_AssetsSchema = new Schema(
         note: {
           type: String
         },
-        invoice: {
-          type: String
-        },
+       
       },
     },
     status: {

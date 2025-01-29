@@ -1,94 +1,79 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
-import Link from "next/link";
-import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
-import { Suspense } from "react";
+import AssetsDashboard from "@/app/_components/AssetsDashboard";
 import Spinner from "@/app/_components/Spinner";
-import { getSail } from "@/app/_lib/actions_sails";
-import SailDashboard from "@/app/_components/SailDashboard";
-import { useTransition } from "react";
-import { revalidatePath } from "next/cache";
 import delete_item from "@/app/_lib/delete_item";
+import { getAssets } from "@/app/_lib/mongo_actions";
+import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { revalidatePath } from "next/cache";
+import Link from "next/link";
+import { useEffect, useState, useTransition } from "react";
 
 const Page = () => {
-  const { _id } = useParams();
+  const { id } = useParams(); // Ensure the parameter name matches your route
   const [equipmentData, setEquipmentData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
+  console.log("Route Parameters:", { id });
+
   useEffect(() => {
+    if (!id) {
+      console.error("ID is missing in the route parameters");
+      setLoading(false);
+      return;
+    }
+
     const fetchEquipmentData = async () => {
-      if (!_id) return;
       try {
-        const equipmentData = await getSail(id);
-        setEquipmentData(equipmentData);
+        const data = await getAssets(id);
+        setEquipmentData(data);
       } catch (error) {
-        console.error("Error fetching equipment technical Data:", error);
+        console.error("Error fetching asset data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (equipmentData === null) {
-      fetchEquipmentData();
-    }
-  }, [_id, equipmentData]);
+    fetchEquipmentData();
+  }, [id]);
 
-  if (!equipmentData && !loading) {
-    return (
-      <h1 className="mt-10 text-2xl font-bold text-center">
-        Equipment Data Not Found
-      </h1>
-    );
-  }
+  if (loading) return <Spinner loading={loading} />;
+  if (!equipmentData) return <h1 className="mt-10 text-2xl font-bold text-center">Equipment Data Not Found</h1>;
 
-  function handleDelete() {
+  const handleDelete = () => {
     if (confirm("Are you sure you want to delete this record?")) {
       startTransition(async () => {
         try {
           await delete_item(equipmentData, "ws_sails");
-          // Optionally show success message or redirect user after deletion
-          revalidatePath("/sails");
+          alert("Item deleted successfully!");
+          revalidatePath("/hiassets");
         } catch (error) {
-          console.error("Error deleting item:", error);
-          // Show error feedback to the user
+          alert("Error deleting item. Please try again.");
         }
       });
     }
-  }
+  };
 
   return (
     <>
-      {loading && <Spinner loading={loading} />}
-      {!loading && equipmentData && (
-        <Suspense fallback={<Spinner />}>
-          <div className="flex flex-row justify-between mb-2">
-            <Link
-              href="/sails"
-              className="flex items-center mb-4 text-2xl font-semibold text-primary-300"
-            >
-              {" "}
-              <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
-                <ArrowLongLeftIcon className="w-6 h-6 mr-2" /> Back to Sails
-              </span>
-            </Link>
-            <>
-              <button
-                title="Delete Item"
-                onClick={handleDelete}
-                disabled={isPending}
-                className="flex items-center mb-4 text-2xl font-semibold text-primary-300"
-              >
-                <TrashIcon className="w-5 h-5 mt-2 transition-colors text-primary-600 group-hover:text-primary-100" />
-              </button>
-            </>
-          </div>
-          <SailDashboard equipmentData={equipmentData} />
-        </Suspense>
-      )}
+      <div className="flex flex-row justify-between mb-2">
+        <Link href="/hiassets" className="flex items-center text-2xl font-semibold text-primary-300">
+          <ArrowLongLeftIcon className="w-6 h-6 mr-2" /> Back to Assets
+        </Link>
+        <button
+          title="Delete Item"
+          onClick={handleDelete}
+          disabled={isPending}
+          className="flex items-center text-2xl font-semibold text-primary-300"
+        >
+          <TrashIcon className="w-5 h-5 mt-2 text-primary-600" />
+        </button>
+      </div>
+      <AssetsDashboard equipmentData={equipmentData} />
     </>
   );
 };
+
 export default Page;

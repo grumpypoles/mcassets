@@ -9,7 +9,7 @@ import EquipmentInvoice from "@/app/_components/EquipmentInvoice";
 function DashboardComponent({ mastData }) {
   return (
     <div className="flex flex-col gap-6 px-12 py-8 text-lg bg-primary-900">
-      <EquipmentHeader type={"Mast"} eqData={mastData} />
+      <EquipmentHeader eqData={mastData} />
       <EquipmentHeaderImage mast={mastData} />
       <div className="grid grid-cols-2 gap-6 px-12 py-8 text-lg bg-primary-900">
         <EquipmentFinance type={"Mast"} eqData={mastData} />
