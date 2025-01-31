@@ -4,20 +4,16 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useMemo, useState } from "react";
-import { updateLocation} from "@/app/_lib/mongo_actions";
+import { updateLocation } from "@/app/_lib/mongo_actions";
 import DuplicateLocation from "@/app/_components/DuplicateLocation";
 
-
-
 const CopyRow = ({ data }) => (
-    <>
-      <div className="flex flex-col w-[100px]">
-        <DuplicateLocation copiedRow={data} />
-      </div>
-    </>
-  );
-  
-  
+  <>
+    <div className="flex flex-col w-[100px]">
+      <DuplicateLocation copiedRow={data} />
+    </div>
+  </>
+);
 
 const LocationGrid = ({ rowData }) => {
   const defaultColDef = useMemo(
@@ -30,25 +26,18 @@ const LocationGrid = ({ rowData }) => {
 
   const [colDefs] = useState([
     {
-      field: "code",
-      headerName: "Code",
-      editable: false,
-      filter: true,
-      maxWidth: 100,
-    },
-    {
       field: "description",
       headerName: "Description",
       filter: true,
-      maxWidth: 400,
+      maxWidth: 500,
     },
-     {
+    {
       field: "custom",
       headerName: "Copy",
       maxWidth: 80,
       tooltipValueGetter: () => "Copy Row",
       cellRenderer: (params) => <CopyRow data={params.data} />,
-    }
+    },
   ]);
 
   const handleCellValueChange = async (params) => {

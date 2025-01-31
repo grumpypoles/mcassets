@@ -4,7 +4,7 @@ import AssetCategories from "@/app/_models/HI_Categories";
 
 async function CategoryList() {
   await connectDB();
-  const categories = await AssetCategories.find({}).sort({ code: 1 }).lean();
+  const categories = await AssetCategories.find({}).sort({ _id: 1 }).lean();
 
   const categoriesData = categories.map((category) => ({
     ...category,

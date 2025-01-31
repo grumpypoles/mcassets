@@ -13,7 +13,7 @@ function DuplicateCategory({ copiedRow, onDelete }) {
       startTransition(() => duplicateCategory(copiedRow));
     
   }
-
+console.log(copiedRow);
   return (
     <button
       onClick={handleDuplicate}

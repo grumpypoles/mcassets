@@ -36,7 +36,7 @@ export async function getAssetsList(id) {
 
 export async function getCategoryList() {
   await connectDB();
-  const json_category_Data = await AssetCategories.find({}).sort({ code: 1 }).lean();
+  const json_category_Data = await AssetCategories.find({}).sort({ _id: 1 }).lean();
   return json_category_Data.map((category) => ({
     ...category,
     _id: category._id.toString(),
@@ -46,14 +46,14 @@ export async function getCategoryList() {
 export async function updateCategory(params) {
   await connectDB();
 
-  const { _id, code, description } = params;
+  const { _id, description } = params;
 
   if (!_id) throw new Error("Category ID is required");
 
   try {
     const updatedCategory = await AssetCategories.findByIdAndUpdate(
       _id,
-      { code, description },
+      { description },
       { new: true, runValidators: true }
     );
 
@@ -73,10 +73,10 @@ export async function updateCategory(params) {
 export async function duplicateCategory(params) {
   await connectDB();
 
-  const code = "XX";
+  
   const description = "New Category";
 
-  const updateData = { code, description };
+  const updateData = { description };
 
   try {
     const result = await AssetCategories.create(updateData);
@@ -98,7 +98,7 @@ export async function duplicateCategory(params) {
 
 export async function getLocationList() {
   await connectDB();
-  const json_location_Data = await AssetLocations.find({}).sort({ code: 1 }).lean();
+  const json_location_Data = await AssetLocations.find({}).sort({ _id: 1 }).lean();
   return json_location_Data.map((location) => ({
     ...location,
     _id: location._id.toString(),
@@ -108,14 +108,14 @@ export async function getLocationList() {
 export async function updateLocation(params) {
  await connectDB();
 
-  const { _id, code, description } = params;
+  const { _id, description } = params;
 
   if (!_id) throw new Error("Location ID is required");
 
   try {
     const updatedLocation = await AssetLocations.findByIdAndUpdate(
       _id,
-      { code, description },
+      { description },
       { new: true, runValidators: true }
     );
 
@@ -135,10 +135,10 @@ export async function updateLocation(params) {
 export async function duplicateLocation(params) {
  await connectDB();
 
-  const code = "XX";
+  
   const description = "New Location";
 
-  const updateData = { code, description };
+  const updateData = { description };
 
   try {
     const result = await AssetLocations.create(updateData);

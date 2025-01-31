@@ -28,18 +28,12 @@ const CategoryGrid = ({ rowData }) => {
   );
 
   const [colDefs] = useState([
-    {
-      field: "code",
-      headerName: "Code",
-      editable: false,
-      filter: true,
-      maxWidth: 100,
-    },
+   
     {
       field: "description",
       headerName: "Description",
       filter: true,
-      maxWidth: 400,
+      maxWidth: 500,
     },
      {
       field: "custom",
