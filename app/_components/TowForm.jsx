@@ -550,7 +550,7 @@ const TowForm = ({edit, data1, data2, data3, data4, data5, data6, data7, data8, 
         </div>
       </div>
       {/* {edit && imageUrls.length > 0 && (
-        <div className="flex flex-row justify-center space-x-7 p-6 px-12 py-8 max-h-96 bg-primary-800">
+        <div className="flex flex-row justify-center p-6 px-12 py-8 space-x-7 max-h-96 bg-primary-800">
           <Image
             src={imageUrls[0]} // Use the first image URL
             alt="Sail Image"

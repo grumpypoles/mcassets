@@ -4,34 +4,40 @@ import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
-import { Suspense } from "react";
 import Spinner from "@/app/_components/Spinner";
-import { getAssets } from "@/app/_lib/mongo_actions";
-// import AssetsForm from "@/app/_components/AssetsForm";
+import AssetsForm from "@/app/_components/AssetsForm";
+import { getAssetsList, getCategoryList, getLocationList } from "@/app/_lib/mongo_actions";
 
-const Page = (params) => {
+const Page = () => {
   const { id } = useParams();
   const [equipmentData, setEquipmentData] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [locations, setLocations] = useState([]);
   const [loading, setLoading] = useState(true);
 
-
   useEffect(() => {
-    const fetchEquipmentData = async () => {
-      if (!id) return;
+    if (!id) return;
+
+    const fetchData = async () => {
       try {
-        const equipmentData = await getAssets(id);
-        setEquipmentData(equipmentData);
+        const [equipment, categoryData, locationData] = await Promise.all([
+          getAssetsList(id),
+          getCategoryList(),
+          getLocationList(),
+        ]);
+
+        setEquipmentData(equipment);
+        setCategories(categoryData);
+        setLocations(locationData);
       } catch (error) {
-        console.error("Error fetching Assets Data:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     };
 
-    if (equipmentData === null) {
-      fetchEquipmentData();
-    }
-  }, [id, equipmentData]);
+    fetchData();
+  }, [id]);
 
   if (!equipmentData && !loading) {
     return (
@@ -41,35 +47,30 @@ const Page = (params) => {
     );
   }
 
-
-  const eqData = {equipmentData}
-
-
-
   return (
-
-    
     <>
-      {loading && <Spinner loading={loading} />}
+      {loading && <Spinner />}
       {!loading && equipmentData && (
         <>
-          <Suspense fallback={<Spinner />}>
-            <Link
-              href="/hiassets"
-              className="flex text-2xl font-semibold items-centermb-4 text-primary-300"
-            >
-              {" "}
-              <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
-                <ArrowLongLeftIcon className="w-6 h-6 mr-2" /> Back to Sails
-              </span>
-            </Link>
+          <Link
+            href="/hiassets"
+            className="flex items-center mb-4 text-2xl font-semibold text-primary-300"
+          >
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
+              <ArrowLongLeftIcon className="w-6 h-6 mr-2" /> Back to Assets
+            </span>
+          </Link>
 
-            {/* <AssetsForm equipment={equipmentData} edit={'edit'}/> */}
-          </Suspense>
-          
+          <AssetsForm
+            equipment={equipmentData}
+            categories={categories}
+            locations={locations}
+            edit={"edit"}
+          />
         </>
       )}
     </>
   );
 };
+
 export default Page;

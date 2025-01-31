@@ -6,10 +6,9 @@ import AssetCategories from "@/app/_models/HI_Categories";
 import AssetLocations from "@/app/_models/HI_Locations";
 import HIAssets from "@/app/_models/HI_Assets";
 import mongoose from "mongoose";
-import { ObjectId } from "mongodb";
 
 //Get all data for specific assets
-export async function getAssets(id) {
+export async function getAssetsList(id) {
   await connectDB();
 
   try {
@@ -34,6 +33,15 @@ export async function getAssets(id) {
 }
 
 // Category Actions
+
+export async function getCategoryList() {
+  await connectDB();
+  const json_category_Data = await AssetCategories.find({}).sort({ code: 1 }).lean();
+  return json_category_Data.map((category) => ({
+    ...category,
+    _id: category._id.toString(),
+  }));
+}
 
 export async function updateCategory(params) {
   await connectDB();
@@ -79,6 +87,7 @@ export async function duplicateCategory(params) {
 
     // Trigger revalidation only if the update is successful
     revalidatePath("/account/admin/categories");
+    return result;
   } catch (error) {
     console.error("Error duplicating category:", error);
     throw new Error("An error occurred while duplicating the category");
@@ -87,35 +96,44 @@ export async function duplicateCategory(params) {
 
 // Location Actions
 
-export async function updateLocation(params) {
+export async function getLocationList() {
   await connectDB();
+  const json_location_Data = await AssetLocations.find({}).sort({ code: 1 }).lean();
+  return json_location_Data.map((location) => ({
+    ...location,
+    _id: location._id.toString(),
+  }));
+}
+
+export async function updateLocation(params) {
+ await connectDB();
 
   const { _id, code, description } = params;
 
-  if (!_id) throw new Error("Category ID is required");
+  if (!_id) throw new Error("Location ID is required");
 
   try {
-    const updatedCategory = await AssetLocations.findByIdAndUpdate(
+    const updatedLocation = await AssetLocations.findByIdAndUpdate(
       _id,
       { code, description },
       { new: true, runValidators: true }
     );
 
-    if (!updatedCategory) {
+    if (!updatedLocation) {
       throw new Error("Location not found or could not be updated");
     }
 
     // Trigger revalidation only if the update is successful
     revalidatePath("/account/admin/locations");
 
-    return updatedCategory;
+    return updatedLocation;
   } catch (error) {
     throw new Error(`Failed to update locations: ${error.message}`);
   }
 }
 
 export async function duplicateLocation(params) {
-  await connectDB();
+ await connectDB();
 
   const code = "XX";
   const description = "New Location";

@@ -4,27 +4,27 @@ import {
 import { format } from "date-fns";
 const EquipmentFinance = ({ type, eqData }) => {
   return (
-    <div className="flex flex-col items-center justify-top  text-primary-800 bg-primary-200">
-      <span className="flex flex-row items-center gap-x-2 mb-4 w-full p-4 text-2xl font-bold  bg-primary-400">
-        <CalculatorIcon className="h-10 w-10" /> Financial Data
+    <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">
+      <span className="flex flex-row items-center w-full p-4 mb-4 text-2xl font-bold gap-x-2 bg-primary-400">
+        <CalculatorIcon className="w-10 h-10" /> Financial Data
       </span>
 
       <div>
         <ul>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
-              <KeyIcon className="h-6 w-6" /> Purchase Date:{" "}
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
+              <KeyIcon className="w-6 h-6" /> Purchase Date:{" "}
               {format(new Date(eqData[0].purchase_date), "dd-MMM-yyyy")}
             </span>
           </li>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
-              <KeyIcon className="h-6 w-6" /> Merchant: {eqData[0].merchant}
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
+              <KeyIcon className="w-6 h-6" /> Merchant: {eqData[0].merchant}
             </span>
           </li>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-lg font-medium">
-              <KeyIcon className="h-6 w-6" /> Retail Price:{" "}
+            <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
+              <KeyIcon className="w-6 h-6" /> Retail Price:{" "}
               {new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "NZD",
@@ -32,8 +32,8 @@ const EquipmentFinance = ({ type, eqData }) => {
             </span>
           </li>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-lg font-medium">
-              <KeyIcon className="h-6 w-6" /> Paid Price:{" "}
+            <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
+              <KeyIcon className="w-6 h-6" /> Paid Price:{" "}
               {new Intl.NumberFormat("en-US", {
                 style: "currency",
                 currency: "NZD",
@@ -41,26 +41,26 @@ const EquipmentFinance = ({ type, eqData }) => {
             </span>
           </li>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
-              <KeyIcon className="h-6 w-6" /> Comments: {eqData[0].comments}
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
+              <KeyIcon className="w-6 h-6" /> Comments: {eqData[0].comments}
             </span>
           </li>
 
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
               {!eqData[0].is_active && (
                 <>
-                  <KeyIcon className="h-6 w-6" /> Disposal Date:{" "}
+                  <KeyIcon className="w-6 h-6" /> Disposal Date:{" "}
                   {format(new Date(eqData[0].disposal_date), "dd-MMM-yyyy")}
                 </>
               )}
             </span>
           </li>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
             {!eqData[0].is_active && (
                 <>
-                  <KeyIcon className="h-6 w-6" />
+                  <KeyIcon className="w-6 h-6" />
                   Disposal Method:{" "}
                   {eqData[0].disposal}
                 </>
@@ -69,10 +69,10 @@ const EquipmentFinance = ({ type, eqData }) => {
             </span>
           </li>
           <li>
-            <span className="flex flex-row items-center gap-x-2 w-full text-xl font-medium">
+            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
             {!eqData[0].is_active && (
                 <>
-                  <KeyIcon className="h-6 w-6" />
+                  <KeyIcon className="w-6 h-6" />
                   Disposal Revenue:{" "}
                   {new Intl.NumberFormat("en-US", {
                 style: "currency",

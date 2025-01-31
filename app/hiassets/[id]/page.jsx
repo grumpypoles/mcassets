@@ -4,7 +4,7 @@ import { useParams } from "next/navigation";
 import AssetsDashboard from "@/app/_components/AssetsDashboard";
 import Spinner from "@/app/_components/Spinner";
 import delete_item from "@/app/_lib/delete_item";
-import { getAssets } from "@/app/_lib/mongo_actions";
+import { getAssetsList } from "@/app/_lib/mongo_actions";
 import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { revalidatePath } from "next/cache";
 import Link from "next/link";
@@ -27,7 +27,7 @@ const Page = () => {
 
     const fetchEquipmentData = async () => {
       try {
-        const data = await getAssets(id);
+        const data = await getAssetsList(id);
         setEquipmentData(data);
       } catch (error) {
         console.error("Error fetching asset data:", error);

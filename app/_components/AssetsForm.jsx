@@ -1,92 +1,119 @@
 import { useState, useEffect } from "react";
-
+import { format } from "date-fns";
 import { addSail } from "@/app/_lib/actions_sails";
 import { editSail } from "@/app/_lib/actions_sails";
 import Image from "next/image";
 
-const AssetsForm = ({ equipment, edit }) => {
-  const [imageUrls, setImageUrls] = useState([]);
-  const [invoiceUrls, setInvoiceUrls] = useState([]);
-
-  useEffect(() => {
-    if (edit) {
-      const imageUrlsString = equipment[0]?.image || "[]"; // Default to '[]' if image is undefined
-      const parsedImageUrls = JSON.parse(imageUrlsString);
-      setImageUrls(parsedImageUrls); // Update state with image URLs
-    }
-  }, [edit, equipment]);
-
-  useEffect(() => {
-    if (edit) {
-      const invoiceImageUrls = equipment[0]?.invoice || "[]";
-      setInvoiceUrls(invoiceImageUrls); // Update state with image URLs
-    }
-  }, [edit, equipment]);
-
-  // State for form data
-  const [formData, setFormData] = useState({
-    selcode: "",
-    card_model: "",
-    card_description: "",
-    // card_image: "",
-    technical_category: "",
-    technical_location: "",
-    technical_maker_name: "",
-    technical_maker_web: "",
-    technical_model_number: "",
-    technical_serial_number: "",
-    // technical_instructions: "",
-    finance_purchase_date: "",
-    finance_purchase_location: "",
-    finance_purchase_amount: "",
-    // finance_purchase_invoice: "",
-    finance_purchase_note: "",
-    finance_disposal_date: "1990-01-01",
-    finance_disposal_amount: "0.00",
-    finance_disposal_note: "",
-    is_active: "",
-
-    // Add other fields here...
+const AssetsForm = ({ equipment, categories, locations, edit }) => {
+  const [urls, setUrls] = useState({
+    image: "",
+    invoice: "",
+    instructions: "",
   });
 
-  // Populate form if `edit` is true and `mastData` is provided
+  const formatNumber = (value) => {
+    return new Intl.NumberFormat("en-US", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2,
+    }).format(value);
+  };
+
   useEffect(() => {
     if (edit && equipment) {
-      setFormData({
-        selcode: equipment.selcode || "",
-        card_model: equipment.card_model ||"",
-        card_description: equipment.card_description || "", 
-        // card_image: "",
-        technical_category: equipment.technical_category || "",
-        technical_location: equipment.technical_location || "",
-        technical_maker_name: equipment.technical_maker_name || "",
-        technical_maker_web: equipment.technical_maker_web || "",
-        technical_model_number: equipment.technical_model_number || "",
-        technical_serial_number: equipment.technical_serial_number || "",
-        // technical_instructions: "",
-        finance_purchase_date: equipment.finance_purchase_date || "",
-        finance_purchase_location: equipment.finance_purchase_location || "",
-        finance_purchase_amount: equipment.finance_purchase_amount || "",
-        // finance_purchase_invoice: "",
-        finance_purchase_note: equipment.finance_purchase_note || "",
-        finance_disposal_date: equipment.finance_disposal_date || "1990-01-01",
-        finance_disposal_amount: equipment.finance_disposal_amount ||"0.00",
-        finance_disposal_note: equipment.finance_disposal_note || "",
-        is_active: equipment.is_active || "",
-
-        // Add other fields here...
+      setUrls({
+        image: equipment.card?.image ? `/images/${equipment.card.image}` : "",
+        invoice: equipment.finance?.purchase?.invoice
+          ? `/invoices/${equipment.finance.purchase.invoice}`
+          : "",
+        instructions: equipment.technical?.instructions
+          ? `/instructions/${equipment.technical.instructions}`
+          : "",
       });
     }
   }, [edit, equipment]);
 
+  const initialFormData =
+    edit && equipment
+      ? {
+          selcode: equipment.selcode ?? "",
+          card_model: equipment.card?.model ?? "",
+          card_description: equipment.card?.description ?? "",
+          card_image: equipment.card?.image ?? "",
+          technical_category: equipment.technical?.category ?? "",
+          technical_location: equipment.technical?.location ?? "",
+          technical_maker_name: equipment.technical?.maker?.name ?? "",
+          technical_maker_web: equipment.technical?.maker?.web ?? "",
+          technical_model_number: equipment.technical?.model_number ?? "",
+          technical_serial_number: equipment.technical?.serial_number ?? "",
+          technical_instructions: equipment.technical?.instructions ?? "",
+          finance_purchase_date: equipment.finance?.purchase?.date ?? "",
+          finance_purchase_location:
+            equipment.finance?.purchase?.location ?? "",
+          finance_purchase_amount: equipment.finance?.purchase?.amount ?? "",
+          finance_purchase_note: equipment.finance?.purchase?.note ?? "",
+          finance_purchase_invoice: equipment.finance?.purchase?.invoice ?? "",
+          finance_disposal_date:
+            equipment.finance?.disposal?.date ?? "1990-01-01",
+          finance_disposal_amount:
+            equipment.finance?.disposal?.amount ?? "0.00",
+          finance_disposal_note: equipment.finance?.disposal?.note ?? "",
+          is_active: equipment.is_active ?? "",
+        }
+      : {
+          selcode: "",
+          card_model: "",
+          card_description: "",
+          card_image: "",
+          technical_category: "",
+          technical_location: "",
+          technical_maker_name: "",
+          technical_maker_web: "",
+          technical_model_number: "",
+          technical_serial_number: "",
+          technical_instructions: "",
+          finance_purchase_date: "",
+          finance_purchase_location: "",
+          finance_purchase_amount: "",
+          finance_purchase_note: "",
+          finance_purchase_invoice: "",
+          finance_disposal_date: "1990-01-01",
+          finance_disposal_amount: "0.00",
+          finance_disposal_note: "",
+          is_active: "",
+        };
+
+  const [formData, setFormData] = useState(initialFormData);
+
   // Handle form input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+
+    // List of numeric fields that require special handling
+    const numericFields = [
+      "finance_purchase_amount",
+      "finance_disposal_amount",
+    ];
+
+    // Check if the field is a numeric field
+    if (numericFields.includes(name)) {
+      // Remove commas and parse the value to a number
+      const numericValue = parseFloat(value.replace(/,/g, ""));
+      const isValid = !isNaN(numericValue) && numericValue >= 0; // Ensure non-negative
+      // Update the state with the numeric value (or empty string if NaN)
+      setFormData((prev) => ({
+        ...prev,
+        [name]: isValid ? numericValue : "",
+      }));
+    } else {
+      // Default handling for other fields
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
+
+  console.log("Asset:", equipment);
 
   return (
     <>
@@ -124,15 +151,24 @@ const AssetsForm = ({ equipment, edit }) => {
                 >
                   Category
                 </label>
-                <input
-                  type="text"
+                <select
                   name="technical_category"
                   id="technical_category"
                   required
                   value={formData.technical_category}
                   onChange={handleInputChange}
-                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
-                />
+                  className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                >
+                  {categories && categories.length > 0 ? (
+                    categories.map((category, index) => (
+                      <option key={index} value={category.description}>
+                        {category.description}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">Loading...</option>
+                  )}
+                </select>
               </div>
               <div className="col-span-2">
                 <label
@@ -141,14 +177,24 @@ const AssetsForm = ({ equipment, edit }) => {
                 >
                   Location
                 </label>
-                <input
-                  type="text"
+                <select
                   name="technical_location"
                   id="technical_location"
+                  required
                   value={formData.technical_location}
                   onChange={handleInputChange}
-                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
-                />
+                  className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                >
+                  {locations && locations.length > 0 ? (
+                    locations.map((location, index) => (
+                      <option key={index} value={location.description}>
+                        {location.description}
+                      </option>
+                    ))
+                  ) : (
+                    <option value="">Loading...</option>
+                  )}
+                </select>
               </div>
               <div className="col-span-3">
                 <label
@@ -202,10 +248,9 @@ const AssetsForm = ({ equipment, edit }) => {
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
                 />
               </div>
-
             </div>
             <div className="grid grid-cols-12 gap-2 mb-5 ">
-            <div className="col-span-2">
+              <div className="col-span-2">
                 <label
                   htmlFor="technical_model_number"
                   className="block mb-3 text-base font-medium text-primary-300"
@@ -250,7 +295,10 @@ const AssetsForm = ({ equipment, edit }) => {
                   type="date"
                   name="finance_purchase_date"
                   id="finance_purchase_date"
-                  value={formData.finance_purchase_date}
+                  value={format(
+                    new Date(formData.finance_purchase_date),
+                    "yyyy-MM-dd"
+                  )}
                   onChange={handleInputChange}
                   required
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -264,18 +312,21 @@ const AssetsForm = ({ equipment, edit }) => {
                   $ Purchase Price
                 </label>
                 <input
-                  type="number"
+                  type="text"
                   step="0.10"
                   name="finance_purchase_amount"
                   id="finance_purchase_amount"
                   required
-                  value={formData.finance_purchase_amount}
+                  value={
+                    formData.finance_purchase_amount === ""
+                      ? ""
+                      : formatNumber(formData.finance_purchase_amount)
+                  }
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
                 />
               </div>
 
- 
               <div className="col-span-4">
                 <label
                   htmlFor="finance_purchase_note"
@@ -295,7 +346,7 @@ const AssetsForm = ({ equipment, edit }) => {
               </div>
             </div>
             <div className="grid grid-cols-9 gap-2 mb-5 ">
-            <div className="col-span-3">
+              <div className="col-span-3">
                 <label
                   htmlFor="finance_purchase_location"
                   className="block mb-3 text-base font-medium text-primary-300"
@@ -365,7 +416,10 @@ const AssetsForm = ({ equipment, edit }) => {
                   name="finance_disposal_date"
                   // defaultValue={"1990-01-01"}
                   id="finance_disposal_date"
-                  value={formData.finance_disposal_date}
+                  value={format(
+                    new Date(formData.finance_disposal_date),
+                    "yyyy-MM-dd"
+                  )}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
                 />
@@ -382,9 +436,12 @@ const AssetsForm = ({ equipment, edit }) => {
                   type="number"
                   step="0.10"
                   name="finance_disposal_amount"
-                  // defaultValue={0.0}
                   id="finance_disposal_amount"
-                  value={formData.finance_disposal_amount}
+                  value={
+                    formData.finance_disposal_amount === ""
+                      ? ""
+                      : formatNumber(formData.finance_disposal_amount)
+                  }
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
                 />
@@ -423,6 +480,11 @@ const AssetsForm = ({ equipment, edit }) => {
                   required
                   className="w-full text-base font-semibold text-primary-800 bg-primary-100 border rounded cursor-pointer file:cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-primary-100 file:hover:bg-primary-200 file:text-primary-900"
                 />
+                 {formData.card_image && (
+                  <p className="mt-2 text-sm text-primary-200">
+                    Current file: {formData.card_image}
+                  </p>
+                )}
               </div>
               <div className="col-span-4">
                 <label
@@ -438,6 +500,11 @@ const AssetsForm = ({ equipment, edit }) => {
                   placeholder="MT"
                   className="w-full text-base font-semibold text-primary-800 bg-primary-100 border rounded cursor-pointer file:cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-primary-100 file:hover:bg-primary-200 file:text-primary-900"
                 />
+                {formData.finance_purchase_invoice && (
+                  <p className="mt-2 text-sm text-primary-200">
+                    Current file: {formData.finance_purchase_invoice}
+                  </p>
+                )}
               </div>
               <div className="col-span-4">
                 <label
@@ -453,8 +520,12 @@ const AssetsForm = ({ equipment, edit }) => {
                   placeholder="MT"
                   className="w-full text-base font-semibold text-primary-800 bg-primary-100 border rounded cursor-pointer file:cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-primary-100 file:hover:bg-primary-200 file:text-primary-900"
                 />
+                {formData.technical_instructions && (
+                  <p className="mt-2 text-sm text-primary-200">
+                    Current file: {formData.technical_instructions}
+                  </p>
+                )}
               </div>
-
             </div>
             <div className="grid grid-cols-12 gap-2 mb-5 ">
               <div className="col-span-2"></div>
@@ -472,24 +543,51 @@ const AssetsForm = ({ equipment, edit }) => {
           </form>
         </div>
       </div>
-      {edit && imageUrls.length > 0 && (
-        <div className="flex flex-row justify-center p-6 px-12 py-8 space-x-7 max-h-96 bg-primary-800">
+      {edit && urls.image.length > 0 && (
+        <div className="flex flex-row p-6 px-12 py-8 justify-evenly space-x-7 max-h-96 bg-primary-800">
           <Image
-            src={imageUrls[0]} // Use the first image URL
-            alt="Sail Image"
+            src={urls.image}
+            alt="Asset Image"
             height={0}
             width={0}
             sizes="100vw"
             className="w-1/6 h-auto rounded-t-xl"
           />
-          <Image
-            src={invoiceUrls[0]}
+
+          <iframe
+            src={urls.invoice}
             alt=""
             height={0}
             width={0}
             sizes="100vw"
             className="w-1/6 h-auto rounded-t-xl"
           />
+          {/* <a href={urls.invoice} target="_blank" rel="noopener noreferrer">
+            <iframe
+              src={urls.invoice}
+              height={0}
+              width={0}
+              sizes="100vw"
+              className="w-1/6 h-auto cursor-pointer rounded-t-xl"
+            />
+          </a> */}
+          <iframe
+            src={urls.instructions}
+            alt=""
+            height={0}
+            width={0}
+            sizes="100vw"
+            className="w-1/6 h-auto rounded-t-xl"
+          />
+          {/* <a href={urls.instructions} target="_blank" rel="noopener noreferrer">
+            <iframe
+              src={urls.instructions}
+              height={0}
+              width={0}
+              sizes="100vw"
+              className="w-1/6 h-auto cursor-pointer rounded-t-xl"
+            />
+          </a> */}
         </div>
       )}
     </>

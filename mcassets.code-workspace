@@ -4,10 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../property-pulse"
-		},
-		{
-			"path": "../mcwoyage-react"
+			"path": "../mcwindsurf"
 		}
 	],
 	"settings": {}
