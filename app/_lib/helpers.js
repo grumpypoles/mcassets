@@ -8,20 +8,47 @@ export const getMonthAbbreviation = (date) => {
   return month.toLocaleString("default", { month: "short" });
 };
 
-export function buildFinancialData(formData, invoiceUrls, action) {
-  return {
-    ...(action === "add" && { selcode: formData.get("selcode") }),
-    purchase_date: formData.get("purchase_date"),
-    merchant: formData.get("merchant"),
-    retail_price: formData.get("retail_price"),
-    paid_price: formData.get("paid_price"),
-    comments: formData.get("comments"),
-    invoice: invoiceUrls,
-    disposal_date: formData.get("disposal_date"),
-    disposal: formData.get("disposal"),
-    disposal_price: formData.get("disposal_price"),
+export function buildAssetsData(formData, imageFile, instructionsFile, invoiceFile, action) {
+  const data = {
+    ...(action === "add" && { selcode: formData.get("selcode") || "" }),
+    card: {
+      description: formData.get("card_description") || "",
+      model: formData.get("card_model") || "",
+      image: imageFile || null,
+    },
+    technical: {
+      category: formData.get("technical_category") || "",
+      location: formData.get("technical_location") || "",
+      maker: {
+        web: formData.get("technical_maker_web") || "",
+        name: formData.get("technical_maker_name") || "",
+      },
+      instructions: instructionsFile || null,
+      model_number: formData.get("technical_model_number") || "",
+      serial_number: formData.get("technical_serial_number") || "",
+    },
+    finance: {
+      purchase: {
+        date: formData.get("finance_purchase_date") || "",
+        location: formData.get("finance_purchase_location") || "",
+        amount: formData.get("finance_purchase_amount") || "",
+        invoice: invoiceFile || null,
+        note: formData.get("finance_purchase_note") || "",
+      },
+      disposal: {
+        date: formData.get("finance_disposal_date") || "",
+        amount: formData.get("finance_disposal_amount") || "",
+      },
+    },
+    status: formData.get("is_active") || "",
+    admin: {
+      creation_date: new Date().toISOString(),
+    },
   };
+
+  return data;
 }
+
 
 export function sundryTechnicalData(formData, imageUrls, appUserId, action) {
   return {

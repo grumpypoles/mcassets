@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { addSail } from "@/app/_lib/actions_sails";
-import { editSail } from "@/app/_lib/actions_sails";
+import { addAsset } from "@/app/_lib/mongo_actions";
+import { editAsset } from "@/app/_lib/mongo_actions";
 import Image from "next/image";
 
 const AssetsForm = ({ equipment, categories, locations, edit }) => {
@@ -21,12 +21,12 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   useEffect(() => {
     if (edit && equipment) {
       setUrls({
-        image: equipment.card?.image ? `/images/${equipment.card.image}` : "",
+        image: equipment.card?.image ? `/uploads/images/${equipment.card.image}` : "",
         invoice: equipment.finance?.purchase?.invoice
-          ? `/invoices/${equipment.finance.purchase.invoice}`
+          ? `/uploads/invoices/${equipment.finance.purchase.invoice}`
           : "",
         instructions: equipment.technical?.instructions
-          ? `/instructions/${equipment.technical.instructions}`
+          ? `/uploads/instructions/${equipment.technical.instructions}`
           : "",
       });
     }
@@ -113,8 +113,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
     }
   };
 
-  console.log("Asset:", equipment);
-
   return (
     <>
       <div className="flex items-center justify-center py-3">
@@ -124,7 +122,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
               {edit ? "Edit Asset" : "Add New Asset"}
             </h1>
           </div>
-          <form className="px-8 pb-6" action={edit ? editSail : addSail}>
+          <form className="px-8 pb-6" action={edit ? editAsset : addAsset} method="POST" encType="multipart/form-data">
             <div className="grid grid-cols-12 gap-2 pt-4 mb-5">
               <div>
                 <label
@@ -154,7 +152,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 <select
                   name="technical_category"
                   id="technical_category"
-                  required
+                  // required
                   value={formData.technical_category}
                   onChange={handleInputChange}
                   className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -166,7 +164,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                       </option>
                     ))
                   ) : (
-                    <option value="">Loading...</option>
+                    <option value="">Electronics</option>
                   )}
                 </select>
               </div>
@@ -180,7 +178,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 <select
                   name="technical_location"
                   id="technical_location"
-                  required
+                  // required
                   value={formData.technical_location}
                   onChange={handleInputChange}
                   className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -192,7 +190,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                       </option>
                     ))
                   ) : (
-                    <option value="">Loading...</option>
+                    <option value="">Karols Office</option>
                   )}
                 </select>
               </div>
@@ -295,10 +293,14 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   type="date"
                   name="finance_purchase_date"
                   id="finance_purchase_date"
-                  value={format(
-                    new Date(formData.finance_purchase_date),
-                    "yyyy-MM-dd"
-                  )}
+                  value={
+                    edit
+                      ? format(
+                          new Date(formData.finance_purchase_date),
+                          "yyyy-MM-dd"
+                        )
+                      : formData.finance_purchase_date
+                  }
                   onChange={handleInputChange}
                   required
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -480,7 +482,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   required
                   className="w-full text-base font-semibold text-primary-800 bg-primary-100 border rounded cursor-pointer file:cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-primary-100 file:hover:bg-primary-200 file:text-primary-900"
                 />
-                 {formData.card_image && (
+                {formData.card_image && (
                   <p className="mt-2 text-sm text-primary-200">
                     Current file: {formData.card_image}
                   </p>

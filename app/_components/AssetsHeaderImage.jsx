@@ -4,9 +4,9 @@ function AssetsHeaderImage({ eqData }) {
   // Check if card.image exists
   let urls;
   if (eqData?.card?.image && eqData.card.image.length > 0) {
-    urls = `/images/${eqData.card.image}`;
+    urls = `/uploads/images/${eqData.card.image}`;
   } else {
-    urls = `/images/AssetImageMissing.jpg`;
+    urls = `/uploads/images/AssetImageMissing.jpg`;
   }
 
   return (
