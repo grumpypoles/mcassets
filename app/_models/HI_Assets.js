@@ -21,11 +21,11 @@ const HI_AssetsSchema = new Schema(
     technical: {
       category: {
         type: String,
-        required: true,
+        required: false,
       },
       location: {
         type: String,
-        required: true,
+        required: false,
       },
       maker : {
         name: {
@@ -90,7 +90,7 @@ const HI_AssetsSchema = new Schema(
       creation:{
         date: {
         type: Date,
-        required: true,
+        required: false,
       },
       user: {
         type: String,

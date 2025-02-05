@@ -3,7 +3,7 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 import Link from "next/link";
 
-function AssetsEdit({ copiedRow, onDelete }) {
+function AssetsEdit({ copiedRow }) {
   return (
     <Link
       href={`/hiassets/${copiedRow._id}/edit`}

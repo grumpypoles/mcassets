@@ -5,7 +5,7 @@ import { useTransition } from "react";
 import SpinnerMini from "@/app/_components/SpinnerMini";
 import { duplicateCategory } from "@/app/_lib/mongo_actions";
 
-function DuplicateCategory({ copiedRow, onDelete }) {
+function DuplicateCategory({ copiedRow }) {
   const [isPending, startTransition] = useTransition();
 
   function handleDuplicate() {
@@ -13,7 +13,7 @@ function DuplicateCategory({ copiedRow, onDelete }) {
       startTransition(() => duplicateCategory(copiedRow));
     
   }
-console.log(copiedRow);
+
   return (
     <button
       onClick={handleDuplicate}

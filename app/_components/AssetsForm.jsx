@@ -21,7 +21,9 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   useEffect(() => {
     if (edit && equipment) {
       setUrls({
-        image: equipment.card?.image ? `/uploads/images/${equipment.card.image}` : "",
+        image: equipment.card?.image
+          ? `/uploads/images/${equipment.card.image}`
+          : "",
         invoice: equipment.finance?.purchase?.invoice
           ? `/uploads/invoices/${equipment.finance.purchase.invoice}`
           : "",
@@ -39,8 +41,10 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
           card_model: equipment.card?.model ?? "",
           card_description: equipment.card?.description ?? "",
           card_image: equipment.card?.image ?? "",
-          technical_category: equipment.technical?.category ?? "",
-          technical_location: equipment.technical?.location ?? "",
+          technical_category:
+            equipment.technical?.category ?? categories?.[0]?.description ?? "",
+          technical_location:
+            equipment.technical?.location ?? locations?.[0]?.description ?? "",
           technical_maker_name: equipment.technical?.maker?.name ?? "",
           technical_maker_web: equipment.technical?.maker?.web ?? "",
           technical_model_number: equipment.technical?.model_number ?? "",
@@ -64,8 +68,8 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
           card_model: "",
           card_description: "",
           card_image: "",
-          technical_category: "",
-          technical_location: "",
+          technical_category: categories?.[0]?.description ?? "",
+          technical_location: locations?.[0]?.description ?? "",
           technical_maker_name: "",
           technical_maker_web: "",
           technical_model_number: "",
@@ -122,7 +126,12 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
               {edit ? "Edit Asset" : "Add New Asset"}
             </h1>
           </div>
-          <form className="px-8 pb-6" action={edit ? editAsset : addAsset} method="POST" encType="multipart/form-data">
+          <form
+            className="px-8 pb-6"
+            action={edit ? editAsset : addAsset}
+            method="POST"
+            encType="multipart/form-data"
+          >
             <div className="grid grid-cols-12 gap-2 pt-4 mb-5">
               <div>
                 <label
@@ -152,7 +161,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 <select
                   name="technical_category"
                   id="technical_category"
-                  // required
+                  required
                   value={formData.technical_category}
                   onChange={handleInputChange}
                   className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -164,7 +173,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                       </option>
                     ))
                   ) : (
-                    <option value="">Electronics</option>
+                    <option value="">Loading...</option>
                   )}
                 </select>
               </div>
@@ -178,7 +187,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 <select
                   name="technical_location"
                   id="technical_location"
-                  // required
+                  required
                   value={formData.technical_location}
                   onChange={handleInputChange}
                   className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -190,7 +199,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                       </option>
                     ))
                   ) : (
-                    <option value="">Karols Office</option>
+                    <option value="">Loading...</option>
                   )}
                 </select>
               </div>
@@ -555,43 +564,14 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
             sizes="100vw"
             className="w-1/6 h-auto rounded-t-xl"
           />
-
-          <iframe
-            src={urls.invoice}
-            alt=""
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="w-1/6 h-auto rounded-t-xl"
-          />
-          {/* <a href={urls.invoice} target="_blank" rel="noopener noreferrer">
-            <iframe
-              src={urls.invoice}
-              height={0}
-              width={0}
-              sizes="100vw"
-              className="w-1/6 h-auto cursor-pointer rounded-t-xl"
-            />
-          </a> */}
-          <iframe
-            src={urls.instructions}
-            alt=""
-            height={0}
-            width={0}
-            sizes="100vw"
-            className="w-1/6 h-auto rounded-t-xl"
-          />
-          {/* <a href={urls.instructions} target="_blank" rel="noopener noreferrer">
-            <iframe
-              src={urls.instructions}
-              height={0}
-              width={0}
-              sizes="100vw"
-              className="w-1/6 h-auto cursor-pointer rounded-t-xl"
-            />
-          </a> */}
+          <a href={urls.invoice} target="_blank" rel="noopener noreferrer">
+            View Invoice
+          </a>
+          <a href={urls.instructions} target="_blank" rel="noopener noreferrer">
+            View Instructions
+          </a>
         </div>
-      )}
+      )}{" "}
     </>
   );
 };

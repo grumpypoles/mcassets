@@ -16,32 +16,34 @@ import { buildAssetsData } from "@/app/_lib/helpers";
 //   throw new Error(`${operation} failed. Please try again later.`);
 // }
 
-async function upload(file, fileType) {
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("fileType", fileType);
+// async function upload(file, fileType) {
+//   const formData = new FormData();
+//   formData.append("file", file);
+//   formData.append("fileType", fileType);
 
-  // Use the full URL for the API route
-  const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3002";
-  const apiUrl = `${baseUrl}/api/upload`;
+//   // Use the full URL for the API route
+//   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN || "http://localhost:3002";
+//   const apiUrl = `${baseUrl}/api/upload`;
 
-  try {
-    const response = await fetch(apiUrl, {
-      method: "POST",
-      body: formData,
-    });
+//   try {
+//     const response = await fetch(apiUrl, {
+//       method: "POST",
+//       body: formData,
+//     });
 
-    if (!response.ok) {
-      throw new Error(`Failed to upload file: ${response.statusText}`);
-    }
+//     if (!response.ok) {
+//       throw new Error(`Failed to upload file: ${response.statusText}`);
+//     }
 
-    const result = await response.json();
-    return result;
-  } catch (error) {
-    console.error("Error uploading file:", error);
-    throw error;
-  }
-}
+//     const result = await response.json();
+//     return result;
+//   } catch (error) {
+//     console.error("Error uploading file:", error);
+//     throw error;
+//   }
+// }
+
+
 //Get all data for specific assets
 export async function getAssetsList(id) {
   await connectDB();
@@ -252,7 +254,7 @@ if (instructionsArrayBuffer) {
   const assetData = buildAssetsData(formData, imageFile, instructionsFile, invoiceFile, "add");
 
   //Post form data
-  
+  console.log("Asset Data:", assetData);
   try {
     const result = await HIAssets.create(assetData);
 

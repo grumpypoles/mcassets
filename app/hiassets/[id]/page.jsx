@@ -3,7 +3,7 @@
 import { useParams } from "next/navigation";
 import AssetsDashboard from "@/app/_components/AssetsDashboard";
 import Spinner from "@/app/_components/Spinner";
-import delete_item from "@/app/_lib/delete_item";
+// import delete_item from "@/app/_lib/delete_item";
 import { getAssetsList } from "@/app/_lib/mongo_actions";
 import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
 import { revalidatePath } from "next/cache";
@@ -43,17 +43,17 @@ const Page = () => {
   if (!equipmentData) return <h1 className="mt-10 text-2xl font-bold text-center">Equipment Data Not Found</h1>;
 
   const handleDelete = () => {
-    if (confirm("Are you sure you want to delete this record?")) {
-      startTransition(async () => {
-        try {
-          await delete_item(equipmentData, "ws_sails");
-          alert("Item deleted successfully!");
-          revalidatePath("/hiassets");
-        } catch (error) {
-          alert("Error deleting item. Please try again.");
-        }
-      });
-    }
+    // if (confirm("Are you sure you want to delete this record?")) {
+    //   startTransition(async () => {
+    //     try {
+    //       await delete_item(equipmentData, "ws_sails");
+    //       alert("Item deleted successfully!");
+    //       revalidatePath("/hiassets");
+    //     } catch (error) {
+    //       alert("Error deleting item. Please try again.");
+    //     }
+    //   });
+    // }
   };
 
   return (
@@ -64,7 +64,7 @@ const Page = () => {
         </Link>
         <button
           title="Delete Item"
-          onClick={handleDelete}
+          // onClick={handleDelete}
           disabled={isPending}
           className="flex items-center text-2xl font-semibold text-primary-300"
         >
