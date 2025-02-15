@@ -44,7 +44,7 @@ const HI_AssetsSchema = new Schema(
         
       },
       instructions: {
-        type: Number,
+        type: String,
       
       },
       

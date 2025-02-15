@@ -508,7 +508,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   type="file"
                   name="invoice"
                   id="invoice"
-                  placeholder="MT"
                   className="w-full text-base font-semibold text-primary-800 bg-primary-100 border rounded cursor-pointer file:cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-primary-100 file:hover:bg-primary-200 file:text-primary-900"
                 />
                 {formData.finance_purchase_invoice && (

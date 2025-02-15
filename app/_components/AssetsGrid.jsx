@@ -10,7 +10,12 @@ import { useMemo, useState } from "react";
 const DetailRowRenderer = (params) => <AssetsDetails copiedRow={params.data} />;
 const EditRowRenderer = (params) => <AssetsEdit copiedRow={params.data} />;
 
-
+const ImageCellRenderer = (params) => {
+  const imageUrl = `/uploads/images/${params.value}`; // Construct the full URL
+  return params.value ? (
+    <img src={imageUrl} alt="Asset" style={{ width: '50px', height: 'auto' }} />
+  ) : null;
+};
 
 const AssetsGrid = ({ rowData }) => {
   const defaultColDef = useMemo(() => ({ flex: 1, editable: false }), []);
@@ -22,6 +27,13 @@ const AssetsGrid = ({ rowData }) => {
     { field: "technical.location", headerName: "Location", minWidth: 200, filter: true },
     { field: "technical.category", headerName: "Category", filter: true },
     { field: "status", headerName: "Status", filter: true },
+    {
+      field: "card.image", // This should contain the filename (e.g., "image.jpg")
+      headerName: "Image",
+      maxWidth: 100,
+      cellRenderer: ImageCellRenderer, // Use the custom image renderer
+      autoHeight: true, // Adjust height automatically
+    },
     {
       field: "custom",
       headerName: "Details",
