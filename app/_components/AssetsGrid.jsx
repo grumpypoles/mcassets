@@ -22,13 +22,13 @@ const AssetsGrid = ({ rowData }) => {
 
   const [colDefs] = useState([
     { field: "selcode", headerName: "Code", filter: true },
-    { field: "card.description", headerName: "Description", minWidth: 200, filter: true },
-    { field: "card.model", headerName: "Model", minWidth: 200, filter: true },
-    { field: "technical.location", headerName: "Location", minWidth: 200, filter: true },
-    { field: "technical.category", headerName: "Category", filter: true },
+    { field: "card_description", headerName: "Description", minWidth: 200, filter: true },
+    { field: "card_model", headerName: "Model", minWidth: 200, filter: true },
+    { field: "technical_location", headerName: "Location", minWidth: 200, filter: true },
+    { field: "technical_category", headerName: "Category", filter: true },
     { field: "status", headerName: "Status", filter: true },
     {
-      field: "card.image", // This should contain the filename (e.g., "image.jpg")
+      field: "card_image", // This should contain the filename (e.g., "image.jpg")
       headerName: "Image",
       maxWidth: 100,
       cellRenderer: ImageCellRenderer, // Use the custom image renderer

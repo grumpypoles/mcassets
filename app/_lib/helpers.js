@@ -17,8 +17,8 @@ export function buildAssetsData(formData, imageFile, instructionsFile, invoiceFi
       image: imageFile.name || null,
     },
     technical: {
-      //category: formData.get("technical_category") || "",
-      //location: formData.get("technical_location") || "",
+      category: formData.get("technical_category") || "",
+      location: formData.get("technical_location") || "",
       maker: {
         web: formData.get("technical_maker_web") || "",
         name: formData.get("technical_maker_name") || "",

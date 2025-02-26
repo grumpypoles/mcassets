@@ -10,7 +10,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
     invoice: "",
     instructions: "",
   });
-
+  console.log(equipment);
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -62,6 +62,10 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
             equipment.finance?.disposal?.amount ?? "0.00",
           finance_disposal_note: equipment.finance?.disposal?.note ?? "",
           is_active: equipment.is_active ?? "",
+          admin_creation_date: equipment.admin?.creation.date ?? "",
+          admin_creation_user: equipment.admin?.creation.user ?? "",
+          admin_update_date: equipment.admin?.update.date ?? "",
+          admin_update_user: equipment.admin?.update.user ?? "",
         }
       : {
           selcode: "",
@@ -84,6 +88,10 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
           finance_disposal_amount: "0.00",
           finance_disposal_note: "",
           is_active: "",
+          admin_creation_date: "",
+          admin_creation_user: "",
+          admin_update_date: "",
+          admin_update_user: "",
         };
 
   const [formData, setFormData] = useState(initialFormData);
@@ -473,8 +481,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
                 />
               </div>
-
-              {/* <div className="col-span-2"></div> */}
             </div>
             <div className="grid grid-cols-12 gap-2 mb-5 ">
               <div className="col-span-4">
@@ -536,6 +542,91 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   </p>
                 )}
               </div>
+            </div>
+            <div className="grid grid-cols-12 gap-2 mb-5 ">
+              <div className="col-span-3">
+                <label
+                  htmlFor="admin_creation_date"
+                  className="block mb-3 text-base font-medium text-primary-300"
+                >
+                  Creation Date
+                </label>
+                <input
+                  type="date"
+                  name="admin_creation_date"
+                  id="admin_creation_date"
+                  value={
+                    edit
+                      ? format(
+                          new Date(formData.admin_creation_date),
+                          "yyyy-MM-dd"
+                        )
+                      : formData.admin_creation_date
+                  }
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
+              </div>
+
+              <div className="col-span-3">
+                <label
+                  htmlFor="admin_update_date"
+                  className="block mb-3 text-base font-medium text-primary-300"
+                >
+                  Update Date
+                </label>
+                <input
+                  type="date"
+                  name="admin_update_date"
+                  // defaultValue={"1990-01-01"}
+                  id="admin_update_date"
+                  value={
+                    edit
+                      ? format(
+                          new Date(formData.admin_update_date),
+                          "yyyy-MM-dd"
+                        )
+                      : formData.admin_update_date
+                  }
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
+              </div>
+
+              <div className="col-span-3">
+                <label
+                  htmlFor="admin_creation_user"
+                  className="block mb-3 text-base font-medium text-primary-300"
+                >
+                  Creation User
+                </label>
+                <input
+                  type="text"
+                  name="admin_creation_user"
+                  id="admin_creation_user"
+                  value={formData.admin_creation_user}
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
+              </div>
+              <div className="col-span-3">
+                <label
+                  htmlFor="admin_update_user"
+                  className="block mb-3 text-base font-medium text-primary-300"
+                >
+                  Update User
+                </label>
+                <input
+                  type="text"
+                  name="admin_update_user"
+                  id="admin_update_user"
+                  value={formData.admin_update_user}
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
+              </div>
+
+              {/* <div className="col-span-2"></div> */}
             </div>
             <div className="grid grid-cols-12 gap-2 mb-5 ">
               <div className="col-span-2"></div>

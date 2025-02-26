@@ -4,8 +4,10 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useMemo, useState } from "react";
-import { updateCategory} from "@/app/_lib/mongo_actions";
+// import { updateCategory} from "@/app/_lib/mongo_actions";
+import { updateCategory} from "@/app/_lib/data-service";
 import DuplicateCategory from "@/app/_components/DuplicateCategory";
+// import DuplicateCategory from "@/app/_components/DuplicateCategory";
 
 
 const CopyRow = ({ data }) => (

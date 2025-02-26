@@ -1,14 +1,15 @@
 "use client";
 
 import { useParams } from "next/navigation";
+import { useEffect, useState, useTransition } from "react";
+import Link from "next/link";
+import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
 import AssetsDashboard from "@/app/_components/AssetsDashboard";
+
 import Spinner from "@/app/_components/Spinner";
 // import delete_item from "@/app/_lib/delete_item";
-import { getAssetsList } from "@/app/_lib/mongo_actions";
-import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+import { getAssetsList } from "@/app/_lib/data-service";
 import { revalidatePath } from "next/cache";
-import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
 
 const Page = () => {
   const { id } = useParams(); // Ensure the parameter name matches your route
@@ -41,7 +42,7 @@ const Page = () => {
 
   if (loading) return <Spinner loading={loading} />;
   if (!equipmentData) return <h1 className="mt-10 text-2xl font-bold text-center">Equipment Data Not Found</h1>;
-
+console.log("Asset Data:", equipmentData)
   const handleDelete = () => {
     // if (confirm("Are you sure you want to delete this record?")) {
     //   startTransition(async () => {

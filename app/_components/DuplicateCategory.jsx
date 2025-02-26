@@ -3,7 +3,7 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 import { useTransition } from "react";
 import SpinnerMini from "@/app/_components/SpinnerMini";
-import { duplicateCategory } from "@/app/_lib/mongo_actions";
+import { duplicateCategory } from "@/app/_lib/data-service";
 
 function DuplicateCategory({ copiedRow }) {
   const [isPending, startTransition] = useTransition();

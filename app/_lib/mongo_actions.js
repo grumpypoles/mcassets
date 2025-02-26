@@ -196,62 +196,63 @@ export async function duplicateLocation(params) {
 
 //Add Asset
 export async function addAsset(formData) {
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-  const imageDir = path.join(uploadDir, 'images');
-  const invoiceDir = path.join(uploadDir, 'invoices');
-  const instructionsDir = path.join(uploadDir, 'instructions');
+  // const uploadDir = path.join(process.cwd(), 'public', 'uploads');
+  // const imageDir = path.join(uploadDir, 'images');
+  // const invoiceDir = path.join(uploadDir, 'invoices');
+  // const instructionsDir = path.join(uploadDir, 'instructions');
 
 // Ensure directories exist
-[imageDir, invoiceDir, instructionsDir].forEach(dir => {
-  if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true });
-  }
-});
+// [imageDir, invoiceDir, instructionsDir].forEach(dir => {
+//   if (!fs.existsSync(dir)) {
+//     fs.mkdirSync(dir, { recursive: true });
+//   }
+// });
 
 // Handle image upload
-let imageFile = formData.get('image');
-if (!imageFile) {
-  imageFile = { name: "AssetImageMissing.jpg", arrayBuffer: async () => null };
-}
+// let imageFile = formData.get('image');
+// if (!imageFile) {
+//   imageFile = { name: "AssetImageMissing.jpg", arrayBuffer: async () => null };
+// }
 
-const imagePath = path.join(imageDir, imageFile.name);
-const imageArrayBuffer = imageFile.arrayBuffer ? await imageFile.arrayBuffer() : null;
+// const imagePath = path.join(imageDir, imageFile.name);
+// const imageArrayBuffer = imageFile.arrayBuffer ? await imageFile.arrayBuffer() : null;
 
-if (imageArrayBuffer) {
-  fs.writeFileSync(imagePath, Buffer.from(imageArrayBuffer));
-}
+// if (imageArrayBuffer) {
+//   fs.writeFileSync(imagePath, Buffer.from(imageArrayBuffer));
+// }
 
 // Handle invoice upload
-let invoiceFile = formData.get('invoice');
-if (!invoiceFile) {
-  invoiceFile = { name: "0000 Missing Invoice.pdf", arrayBuffer: async () => null };
-}
+// let invoiceFile = formData.get('invoice');
+// if (!invoiceFile) {
+//   invoiceFile = { name: "0000 Missing Invoice.pdf", arrayBuffer: async () => null };
+// }
 
-const invoicePath = path.join(invoiceDir, invoiceFile.name);
-const invoiceArrayBuffer = invoiceFile.arrayBuffer ? await invoiceFile.arrayBuffer() : null;
+// const invoicePath = path.join(invoiceDir, invoiceFile.name);
+// const invoiceArrayBuffer = invoiceFile.arrayBuffer ? await invoiceFile.arrayBuffer() : null;
 
-if (invoiceArrayBuffer) {
-  fs.writeFileSync(invoicePath, Buffer.from(invoiceArrayBuffer));
-}
+// if (invoiceArrayBuffer) {
+//   fs.writeFileSync(invoicePath, Buffer.from(invoiceArrayBuffer));
+// }
 
 // Handle instructions upload
-let instructionsFile = formData.get('instructions');
-if (!instructionsFile) {
-  instructionsFile = { name: "0000 No Instructions.pdf", arrayBuffer: async () => null };
-}
+// let instructionsFile = formData.get('instructions');
+// if (!instructionsFile) {
+//   instructionsFile = { name: "0000 No Instructions.pdf", arrayBuffer: async () => null };
+// }
 
-const instructionsPath = path.join(instructionsDir, instructionsFile.name);
-const instructionsArrayBuffer = instructionsFile.arrayBuffer ? await instructionsFile.arrayBuffer() : null;
+// const instructionsPath = path.join(instructionsDir, instructionsFile.name);
+// const instructionsArrayBuffer = instructionsFile.arrayBuffer ? await instructionsFile.arrayBuffer() : null;
 
-if (instructionsArrayBuffer) {
-  fs.writeFileSync(instructionsPath, Buffer.from(instructionsArrayBuffer));
-}
+// if (instructionsArrayBuffer) {
+//   fs.writeFileSync(instructionsPath, Buffer.from(instructionsArrayBuffer));
+// }
 
 
 
   // Get form data
     
-  const assetData = buildAssetsData(formData, imageFile, instructionsFile, invoiceFile, "add");
+  // const assetData = buildAssetsData(formData, imageFile, instructionsFile, invoiceFile, "add");
+  const assetData = buildAssetsData(formData,  "add");
 
   //Post form data
   console.log("Asset Data:", assetData);

@@ -65,7 +65,7 @@ const HI_AssetsSchema = new Schema(
           type: String
         },
         invoice: {
-          invoice: String
+          type: String
         },
       },
       disposal:{
@@ -99,7 +99,7 @@ const HI_AssetsSchema = new Schema(
       update:{
         date: {
         type: Date,
-        required: true,
+        required: false,
       },
       user: {
         type: String,

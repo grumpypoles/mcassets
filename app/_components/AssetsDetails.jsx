@@ -7,7 +7,7 @@ function AssetsDetails({ copiedRow }) {
  
 
 // Ensure copiedRow and copiedRow.id exist
-if (!copiedRow || !copiedRow._id) {
+if (!copiedRow || !copiedRow.id) {
   return null; // Handle the case where copiedRow is not passed
 }
 
@@ -18,7 +18,7 @@ if (!copiedRow || !copiedRow._id) {
 
     
     <Link
-      href={`/hiassets/${copiedRow._id}`}
+      href={`/hiassets/${copiedRow.id}`}
       className="flex items-center mb-4 text-2xl font-semibold text-primary-300"
     >
       {" "}

@@ -3,7 +3,7 @@ import { DocumentDuplicateIcon } from "@heroicons/react/24/solid";
 
 import { useTransition } from "react";
 import SpinnerMini from "@/app/_components/SpinnerMini";
-import { duplicateLocation } from "@/app/_lib/mongo_actions";
+import { duplicateLocation } from "@/app/_lib/data-service";
 
 function DuplicateLocation({ copiedRow, onDelete }) {
   const [isPending, startTransition] = useTransition();

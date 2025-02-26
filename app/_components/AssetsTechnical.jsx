@@ -1,15 +1,20 @@
 import { KeyIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/solid";
+
 const AssetsTechnical = ({ eqData }) => {
-  // Check if technical instruction exists
-  let pdf_urls;
-  if (
-    eqData?.technical?.instructions &&
-    eqData.technical.instructions.length > 0
-  ) {
-    pdf_urls = `/instructions/${eqData.technical.instructions}`;
-  } else {
-    pdf_urls = `/instructions/AssetImageMissing.jpg`;
+  if (!eqData || eqData.length === 0) {
+    return <div className="p-4 text-center">No technical data available.</div>;
   }
+
+  const {
+    technical_instructions = "0000 No Instructions.pdf",
+    technical_category = "Unknown",
+    technical_location = "Unknown",
+    technical_serial_number = "N/A",
+    status = "Unknown",
+    technical_maker_web = "",
+  } = eqData[0] || {};
+
+  const pdf_urls = `/uploads/instructions/${technical_instructions}`;
 
   return (
     <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">
@@ -21,53 +26,50 @@ const AssetsTechnical = ({ eqData }) => {
         <ul>
           <li>
             <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
-              <KeyIcon className="w-6 h-6" /> Category:{" "}
-              {eqData.technical.category}
+              <KeyIcon className="w-6 h-6" /> Category: {technical_category}
             </span>
           </li>
           <li>
             <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
-              <KeyIcon className="w-6 h-6" /> Location:{" "}
-              {eqData.technical.location}
+              <KeyIcon className="w-6 h-6" /> Location: {technical_location}
             </span>
           </li>
           <li>
             <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
-              <KeyIcon className="w-6 h-6" /> Serial Number:{" "}
-              {eqData.technical.serial_number}
+              <KeyIcon className="w-6 h-6" /> Serial Number: {technical_serial_number}
             </span>
           </li>
           <li>
             <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
-              <KeyIcon className="w-6 h-6" /> Status: {eqData.status}
+              <KeyIcon className="w-6 h-6" /> Status: {status}
             </span>
           </li>
-          <li>
-            <span className="flex flex-row items-center w-full text-xl font-medium gap-x-2">
+          {technical_maker_web && (
+            <li>
               <a
-                href={eqData.technical.maker.web}
-                className="flex flex-row items-center w-full text-xl font-medium gap-x-2"
+                href={technical_maker_web}
+                className="flex flex-row items-center w-full text-xl font-medium text-blue-600 underline gap-x-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Maker WEB: {eqData.technical.maker.web}
+                Maker WEB: {technical_maker_web}
               </a>
-            </span>
-          </li>
-          <li>
-            <span className="flex flex-row items-center w-full mb-10 text-xl font-medium gap-x-2">
+            </li>
+          )}
+          {technical_instructions && (
+            <li>
               <a
                 href={pdf_urls}
-                className="flex flex-row items-center w-full text-xl font-medium gap-x-2"
+                className="flex flex-row items-center w-full text-xl font-medium text-blue-600 underline gap-x-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Instructions: {eqData.technical.instructions}
+                Instructions: {technical_instructions}
               </a>
-            </span>
-          </li>
+            </li>
+          )}
         </ul>
       </div>
     </div>
