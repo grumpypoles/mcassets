@@ -1,11 +1,11 @@
 "use client";
 
 import AssetsForm from "@/app/_components/AssetsForm";
-import { useEffect, useState } from "react";
 import Spinner from "@/app/_components/Spinner";
+import { getCategories, getLocations } from "@/app/_lib/data-service";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { getCategoryList, getLocationList } from "@/app/_lib/mongo_actions";
+import { useEffect, useState } from "react";
 
 const Page = () => {
   const [categories, setCategories] = useState([]);
@@ -16,8 +16,8 @@ const Page = () => {
     const fetchData = async () => {
       try {
         const [categoryData, locationData] = await Promise.all([
-          getCategoryList(),
-          getLocationList(),
+          getCategories(),
+          getLocations(),
         ]);
 
         setCategories(categoryData);

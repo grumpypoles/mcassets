@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
-import { addAsset } from "@/app/_lib/mongo_actions";
-import { editAsset } from "@/app/_lib/mongo_actions";
+import { addAsset, editAsset } from "@/app/_lib/data-service";
 import Image from "next/image";
 
 const AssetsForm = ({ equipment, categories, locations, edit }) => {
@@ -17,18 +16,17 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
       maximumFractionDigits: 2,
     }).format(value);
   };
-
+  const asset = edit && equipment ? equipment[0] : null;
   useEffect(() => {
     if (edit && equipment) {
+      
       setUrls({
-        image: equipment.card?.image
-          ? `/uploads/images/${equipment.card.image}`
+        image: asset.card_image ? `/uploads/images/${asset.card_image}` : "",
+        invoice: asset.finance_purchase_invoice
+          ? `/uploads/invoices/${asset.finance_purchase_invoice}`
           : "",
-        invoice: equipment.finance?.purchase?.invoice
-          ? `/uploads/invoices/${equipment.finance.purchase.invoice}`
-          : "",
-        instructions: equipment.technical?.instructions
-          ? `/uploads/instructions/${equipment.technical.instructions}`
+        instructions: asset.technical_instructions
+          ? `/uploads/instructions/${asset.technical_instructions}`
           : "",
       });
     }
@@ -37,35 +35,32 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   const initialFormData =
     edit && equipment
       ? {
-          selcode: equipment.selcode ?? "",
-          card_model: equipment.card?.model ?? "",
-          card_description: equipment.card?.description ?? "",
-          card_image: equipment.card?.image ?? "",
+          selcode: asset.selcode ?? "",
+          card_model: asset.card_model ?? "",
+          card_description: asset.card_description ?? "",
+          card_image: asset.card_image ?? "",
           technical_category:
-            equipment.technical?.category ?? categories?.[0]?.description ?? "",
+            asset.technical_category ?? categories?.[0]?.description ?? "",
           technical_location:
-            equipment.technical?.location ?? locations?.[0]?.description ?? "",
-          technical_maker_name: equipment.technical?.maker?.name ?? "",
-          technical_maker_web: equipment.technical?.maker?.web ?? "",
-          technical_model_number: equipment.technical?.model_number ?? "",
-          technical_serial_number: equipment.technical?.serial_number ?? "",
-          technical_instructions: equipment.technical?.instructions ?? "",
-          finance_purchase_date: equipment.finance?.purchase?.date ?? "",
-          finance_purchase_location:
-            equipment.finance?.purchase?.location ?? "",
-          finance_purchase_amount: equipment.finance?.purchase?.amount ?? "",
-          finance_purchase_note: equipment.finance?.purchase?.note ?? "",
-          finance_purchase_invoice: equipment.finance?.purchase?.invoice ?? "",
-          finance_disposal_date:
-            equipment.finance?.disposal?.date ?? "1990-01-01",
-          finance_disposal_amount:
-            equipment.finance?.disposal?.amount ?? "0.00",
-          finance_disposal_note: equipment.finance?.disposal?.note ?? "",
-          is_active: equipment.is_active ?? "",
-          admin_creation_date: equipment.admin?.creation.date ?? "",
-          admin_creation_user: equipment.admin?.creation.user ?? "",
-          admin_update_date: equipment.admin?.update.date ?? "",
-          admin_update_user: equipment.admin?.update.user ?? "",
+            asset.technical_location ?? locations?.[0]?.description ?? "",
+          technical_maker_name: asset.technical_maker_name ?? "",
+          technical_maker_web: asset.technical_maker_web ?? "",
+          technical_model_number: asset.technical_model_number ?? "",
+          technical_serial_number: asset.technical_serial_number ?? "",
+          technical_instructions: asset.technical_instructions ?? "",
+          finance_purchase_date: asset.finance_purchase_date ?? "",
+          finance_purchase_location: asset.finance_purchase_location ?? "",
+          finance_purchase_amount: asset.finance_purchase_amount ?? "",
+          finance_purchase_note: asset.finance_purchase_note ?? "",
+          finance_purchase_invoice: asset.finance_purchase_invoice ?? "",
+          finance_disposal_date: asset.finance_disposal_date ?? "1990-01-01",
+          finance_disposal_amount: asset.finance_disposal_amount ?? "0.00",
+          finance_disposal_note: asset.finance_disposal_note ?? "",
+          is_active: asset.is_active ?? "",
+          admin_creation_date: asset.admin_creation_date ?? "",
+          admin_creation_user: asset.admin_creation_user ?? "",
+          admin_update_date: asset.admin_update_date ?? "",
+          admin_update_user: asset.admin_update_user ?? "",
         }
       : {
           selcode: "",
@@ -543,91 +538,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 )}
               </div>
             </div>
-            <div className="grid grid-cols-12 gap-2 mb-5 ">
-              <div className="col-span-3">
-                <label
-                  htmlFor="admin_creation_date"
-                  className="block mb-3 text-base font-medium text-primary-300"
-                >
-                  Creation Date
-                </label>
-                <input
-                  type="date"
-                  name="admin_creation_date"
-                  id="admin_creation_date"
-                  value={
-                    edit
-                      ? format(
-                          new Date(formData.admin_creation_date),
-                          "yyyy-MM-dd"
-                        )
-                      : formData.admin_creation_date
-                  }
-                  onChange={handleInputChange}
-                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
-                />
-              </div>
 
-              <div className="col-span-3">
-                <label
-                  htmlFor="admin_update_date"
-                  className="block mb-3 text-base font-medium text-primary-300"
-                >
-                  Update Date
-                </label>
-                <input
-                  type="date"
-                  name="admin_update_date"
-                  // defaultValue={"1990-01-01"}
-                  id="admin_update_date"
-                  value={
-                    edit
-                      ? format(
-                          new Date(formData.admin_update_date),
-                          "yyyy-MM-dd"
-                        )
-                      : formData.admin_update_date
-                  }
-                  onChange={handleInputChange}
-                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
-                />
-              </div>
-
-              <div className="col-span-3">
-                <label
-                  htmlFor="admin_creation_user"
-                  className="block mb-3 text-base font-medium text-primary-300"
-                >
-                  Creation User
-                </label>
-                <input
-                  type="text"
-                  name="admin_creation_user"
-                  id="admin_creation_user"
-                  value={formData.admin_creation_user}
-                  onChange={handleInputChange}
-                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
-                />
-              </div>
-              <div className="col-span-3">
-                <label
-                  htmlFor="admin_update_user"
-                  className="block mb-3 text-base font-medium text-primary-300"
-                >
-                  Update User
-                </label>
-                <input
-                  type="text"
-                  name="admin_update_user"
-                  id="admin_update_user"
-                  value={formData.admin_update_user}
-                  onChange={handleInputChange}
-                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
-                />
-              </div>
-
-              {/* <div className="col-span-2"></div> */}
-            </div>
             <div className="grid grid-cols-12 gap-2 mb-5 ">
               <div className="col-span-2"></div>
               <div className="col-span-2"></div>

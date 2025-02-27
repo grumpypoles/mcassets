@@ -48,12 +48,12 @@ const AssetsTechnical = ({ eqData }) => {
             <li>
               <a
                 href={technical_maker_web}
-                className="flex flex-row items-center w-full text-xl font-medium text-blue-600 underline gap-x-2"
+                className="flex flex-row items-center w-full text-xl font-medium gap-x-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Maker WEB: {technical_maker_web}
+                Maker WEB: <span style={{ textDecoration: 'underline' }}>{technical_maker_web}</span>
               </a>
             </li>
           )}
@@ -61,12 +61,12 @@ const AssetsTechnical = ({ eqData }) => {
             <li>
               <a
                 href={pdf_urls}
-                className="flex flex-row items-center w-full text-xl font-medium text-blue-600 underline gap-x-2"
+                className="flex flex-row items-center w-full text-xl font-medium gap-x-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Instructions: {technical_instructions}
+                Instructions: <span style={{ textDecoration: 'underline' }}>{technical_instructions}</span>
               </a>
             </li>
           )}

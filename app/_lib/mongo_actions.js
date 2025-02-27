@@ -1,5 +1,5 @@
 "use server";
-
+/*
 import connectDB from "@/app/_config/database";
 import HIAssets from "@/app/_models/HI_Assets";
 import AssetCategories from "@/app/_models/HI_Categories";
@@ -308,3 +308,4 @@ export async function editAsset(formData) {
   // //   handleSupabaseError(financialError, "Updating financial data");
   // revalidatePath("/hiassets");
 }
+*/

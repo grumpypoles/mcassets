@@ -6,10 +6,11 @@ import Link from "next/link";
 import { ArrowLongLeftIcon } from "@heroicons/react/24/solid";
 import Spinner from "@/app/_components/Spinner";
 import AssetsForm from "@/app/_components/AssetsForm";
-import { getAssetsList, getCategoryList, getLocationList } from "@/app/_lib/mongo_actions";
+import { getAssetsList, getCategories, getLocations } from "@/app/_lib/data-service";
 
 const Page = () => {
   const { id } = useParams();
+  
   const [equipmentData, setEquipmentData] = useState(null);
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
@@ -22,8 +23,8 @@ const Page = () => {
       try {
         const [equipment, categoryData, locationData] = await Promise.all([
           getAssetsList(id),
-          getCategoryList(),
-          getLocationList(),
+          getCategories(),
+          getLocations(),
         ]);
 
         setEquipmentData(equipment);
@@ -38,7 +39,7 @@ const Page = () => {
 
     fetchData();
   }, [id]);
-
+console.log(equipmentData)
   if (!equipmentData && !loading) {
     return (
       <h1 className="mt-10 text-2xl font-bold text-center">

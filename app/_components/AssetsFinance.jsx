@@ -88,12 +88,12 @@ const AssetsFinance = ({ eqData }) => {
             <span className="flex flex-row items-center w-full mb-10 text-xl font-medium gap-x-2">
               <a
                 href={pdf_urls}
-                className="flex flex-row items-center w-full text-xl font-medium text-blue-600 underline gap-x-2"
+                className="flex flex-row items-center w-full text-xl font-medium gap-x-2"
                 target="_blank"
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Invoice: {asset.finance_purchase_invoice || "N/A"}
+                Invoice: <span style={{ textDecoration: 'underline' }}>{asset.finance_purchase_invoice || "N/A"}</span>
               </a>
             </span>
           </li>

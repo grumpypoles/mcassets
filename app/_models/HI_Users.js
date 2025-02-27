@@ -1,3 +1,5 @@
+/*
+
 import { Schema, model, models } from "mongoose";
 
 const HI_UsersSchema = new Schema({
@@ -20,4 +22,5 @@ const HI_UsersSchema = new Schema({
 
 const HI_Users = models.HI_Users || model('HI_Users', HI_UsersSchema)
 
-export default HI_Users
+export default HI_Users 
+*/

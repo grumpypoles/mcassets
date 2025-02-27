@@ -1,3 +1,5 @@
+
+/*
 import { Schema, model, models } from "mongoose";
 
 const HI_AssetsSchema = new Schema(
@@ -117,3 +119,4 @@ const HI_AssetsSchema = new Schema(
 const HI_Assets = models.HI_Assets || model("HI_Assets", HI_AssetsSchema);
 
 export default HI_Assets;
+*/

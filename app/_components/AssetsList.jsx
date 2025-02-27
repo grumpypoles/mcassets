@@ -1,18 +1,13 @@
 import AssetsGrid from "@/app/_components/AssetsGrid";
-import connectDB from "@/app/_config/database";
 import { auth } from "@/app/_lib/auth";
-import McAssets from "@/app/_models/HI_Assets";
 import { getAssets } from "@/app/_lib/data-service";
 
-async function AssetsList() {
-  // await connectDB();
-  // const json_assets_Data = await McAssets.find({}).sort({ selcode: -1 }).lean();
-  // const assets_Data = json_assets_Data.map((asset) => ({
-  //   ...asset,
-  //   _id: asset._id.toString(),
-  // }));
-
+export default async function AssetsList() {
   const session = await auth();
+  if (!session) {
+    return <h1 className="mb-5 text-3xl font-medium text-red-500">You need to log in to view your assets.</h1>;
+  }
+
   const assetData = await getAssets();
 
   return (
@@ -27,5 +22,3 @@ async function AssetsList() {
     </div>
   );
 }
-
-export default AssetsList;
