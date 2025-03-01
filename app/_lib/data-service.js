@@ -7,10 +7,17 @@ import path from 'path';
 import fs from 'fs';
 import { auth } from "@/app/_lib/auth";
 import { buildAssetsData } from "@/app/_lib/helpers";
-
+import { UploadFiles } from '@/app/_components/UploadFiles';
 
 // //For Testing
 // await new Promise((res)=> setTimeout(res, 3000))
+
+// Error function
+function handleSupabaseError(error, operation) {
+  console.error(`${operation} failed:`, error);
+  throw new Error(`${operation} failed. Please try again later.`);
+}
+
 
 /////////////
 // GET
@@ -200,100 +207,46 @@ export async function updateLocation(params) {
   revalidatePath("/account/admin/locations");
 }
 
-//* Asset Form Category */
+//* Asset Form */
 
 //Add new asset
+
+
 export async function addAsset(formData) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
-  /*
-  // Upload Images
-  const images = formData.getAll("image");
-  const imageUrls = await UploadFiles(images, "ws_images");
 
-  // Upload Invoices
-  const invoices = formData.getAll("invoice");
-  const invoiceUrls = await UploadFiles(invoices, "ws_invoices");
+// Helper function to determine if a file is valid
+const isValidFile = (file) => file && file.size > 0 && file.name !== "undefined";
 
-  */
-  const uploadDir = path.join(process.cwd(), "public", "uploads");
-  const imageDir = path.join(uploadDir, "images");
-  const invoiceDir = path.join(uploadDir, "invoices");
-  const instructionsDir = path.join(uploadDir, "instructions");
+// Upload Image if it exists
+const imageFile = formData.get("image");
+const imageUrls = isValidFile(imageFile) ? await UploadFiles([imageFile], "images") : [];
+const imageName = imageUrls.length > 0 ? path.basename(imageUrls[0]) : "AssetImageMissing.jpg";
 
-  //Ensure directories exist
-  [imageDir, invoiceDir, instructionsDir].forEach((dir) => {
-    if (!fs.existsSync(dir)) {
-      fs.mkdirSync(dir, { recursive: true });
-    }
-  });
+// Upload Invoice if it exists
+const invoiceFile = formData.get("invoice");
+const invoiceUrls = isValidFile(invoiceFile) ? await UploadFiles([invoiceFile], "invoices") : [];
+const invoiceName = invoiceUrls.length > 0 ? path.basename(invoiceUrls[0]) : "0000 Missing Invoice.pdf";
 
-  //Handle image upload
-  let imageFile = formData.get("image");
-  if (!imageFile) {
-    imageFile = {
-      name: "AssetImageMissing.jpg",
-      arrayBuffer: async () => null,
-    };
-  }
+// Upload Instruction if it exists
+const instructionFile = formData.get("instructions");
+const instructionUrls = isValidFile(instructionFile) ? await UploadFiles([instructionFile], "instructions") : [];
+const instructionName = instructionUrls.length > 0 ? path.basename(instructionUrls[0]) : "0000 No Instructions.pdf";
 
-  const imagePath = path.join(imageDir, imageFile.name);
-  const imageArrayBuffer = imageFile.arrayBuffer
-    ? await imageFile.arrayBuffer()
-    : null;
+// Get form data
+const newAssetData = buildAssetsData(
+  formData,
+  { name: imageName },
+  { name: instructionName },
+  { name: invoiceName },
+  session.user.appUserId,
+  "add"
+);
 
-  if (imageArrayBuffer) {
-    fs.writeFileSync(imagePath, Buffer.from(imageArrayBuffer));
-  }
 
-  //Handle invoice upload
-  let invoiceFile = formData.get("invoice");
-  if (!invoiceFile) {
-    invoiceFile = {
-      name: "0000 Missing Invoice.pdf",
-      arrayBuffer: async () => null,
-    };
-  }
 
-  const invoicePath = path.join(invoiceDir, invoiceFile.name);
-  const invoiceArrayBuffer = invoiceFile.arrayBuffer
-    ? await invoiceFile.arrayBuffer()
-    : null;
-
-  if (invoiceArrayBuffer) {
-    fs.writeFileSync(invoicePath, Buffer.from(invoiceArrayBuffer));
-  }
-
-  //Handle instructions upload
-  let instructionsFile = formData.get("instructions");
-  if (!instructionsFile) {
-    instructionsFile = {
-      name: "0000 No Instructions.pdf",
-      arrayBuffer: async () => null,
-    };
-  }
-
-  const instructionsPath = path.join(instructionsDir, instructionsFile.name);
-  const instructionsArrayBuffer = instructionsFile.arrayBuffer
-    ? await instructionsFile.arrayBuffer()
-    : null;
-
-  if (instructionsArrayBuffer) {
-    fs.writeFileSync(instructionsPath, Buffer.from(instructionsArrayBuffer));
-  }
-
-  // Get form data
-
-  const newAssetData = buildAssetsData(
-    formData,
-    imageFile,
-    instructionsFile,
-    invoiceFile,
-    session.user.appUserId,
-    "add"
-  );
-
-  //Post form data
+  // Post form data
   const { data: technicalDataInput, error: technicalError } = await supabase
     .from("hi_assets")
     .insert(newAssetData);
@@ -302,13 +255,14 @@ export async function addAsset(formData) {
     handleSupabaseError(technicalError, "Inserting asset data");
 
   revalidatePath("/hiassets");
+  
 }
-/*
+
 //Edit existing board
-export async function editBoard(formData) {
+export async function editAsset(formData) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
-
+/*
   // Upload Images
   const images = formData.getAll("image");
   const imageUrls = await UploadFiles(images, "ws_images");
@@ -317,38 +271,33 @@ export async function editBoard(formData) {
   const invoices = formData.getAll("invoice");
   const invoiceUrls = await UploadFiles(invoices, "ws_invoices");
 
+  */
+
   // Set the selcode
   const selcode = formData.get("selcode");
 
   // Get form data
 
-  const technicalData = boardTechnicalDataTechnicalData(
-    formData,
-    imageUrls,
-    session.user.appUserId,
-    "edit"
-  );
-
-  const financialData = buildFinancialData(formData, invoiceUrls, "edit");
+ // Get form data
+const newAssetData = buildAssetsData(
+  formData,
+  { name: imageName },
+  { name: instructionName },
+  { name: invoiceName },
+  session.user.appUserId,
+  "edit"
+);
 
   //Post form data
 
-  const { data: technicalDataEdit, error: technicalError } = await supabase
-    .from("ws_boards")
-    .update(technicalData)
-    .eq("selcode", selcode);
-
-  if (technicalError)
-    handleSupabaseError(technicalError, "Updating technical data");
-
   const { data: FinancialDataEdit, error: financialError } = await supabase
-    .from("ws_costs")
-    .update(financialData)
+    .from("hi_assets")
+    .update(newAssetData)
     .eq("selcode", selcode);
 
   if (financialError)
-    handleSupabaseError(financialError, "Updating financial data");
+    handleSupabaseError(financialError, "Updating asset data");
 
-  revalidatePath("/boards");
+  revalidatePath("/hiassets");
 }
-  */
+

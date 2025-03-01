@@ -17,7 +17,15 @@ export function buildAssetsData(
   action
 ) {
   const data = {
-    ...(action === "add" && { selcode: formData.get("selcode") || "" }),
+    ...(action === "add" && {
+      selcode: formData.get("selcode") || "",
+      admin_creation_date: new Date().toISOString(),
+      admin_creation_user: appUserId,
+    }),
+    ...(action === "edit" && {
+      admin_update_date: new Date().toISOString(),
+      admin_update_user: appUserId,
+    }),
 
     card_description: formData.get("card_description") || "",
     card_model: formData.get("card_model") || "",
@@ -38,9 +46,7 @@ export function buildAssetsData(
     finance_disposal_amount: formData.get("finance_disposal_amount") || "",
     finance_disposal_note: formData.get("finance_disposal_note") || "",
     status: formData.get("is_active") || "",
-    admin_creation_date: new Date().toISOString(),
-    admin_creation_user: appUserId,
-    
+   
   };
 
   return data;
