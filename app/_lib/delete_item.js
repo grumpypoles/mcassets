@@ -1,12 +1,18 @@
 "use server";
 
-import cloudinary from "@/app/_lib/cloudinary";
+
 import { supabase } from "@/app/_lib/supabase";
 
-async function delete_item(eqData, eqCategory) {
-  const dataImage = eqData[0].image;
-  const dataInvoice = eqData[0].invoice;
-  const selcode = eqData[0].selcode;
+async function delete_item(eqData) {
+  
+  const perma_image ="AssetImageMissing.jpg" 
+  const perma_invoice = "0000 Missing Invoice.pdf"
+  const perma_instruction = "0000 Missing Instruction.pdf"
+  
+  const dataImage = eqData[0].card_image;
+  const dataInvoice = eqData[0].finance_purchase_invoice;
+  const dataInstructions = eqData[0].technical_instructions;
+  
 
   let imagesSuccess = true;
   let invoicesSuccess = true;
