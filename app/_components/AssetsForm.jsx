@@ -19,7 +19,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   const asset = edit && equipment ? equipment[0] : null;
   useEffect(() => {
     if (edit && equipment) {
-      
       setUrls({
         image: asset.card_image ? `/uploads/images/${asset.card_image}` : "",
         invoice: asset.finance_purchase_invoice
@@ -326,15 +325,16 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   $ Purchase Price
                 </label>
                 <input
-                  type="text"
+                  type="number"
                   step="0.10"
+                  min="0.00"
                   name="finance_purchase_amount"
                   id="finance_purchase_amount"
                   required
                   value={
                     formData.finance_purchase_amount === ""
                       ? ""
-                      : formatNumber(formData.finance_purchase_amount)
+                      : formData.finance_purchase_amount
                   }
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -449,12 +449,13 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 <input
                   type="number"
                   step="0.10"
+                  min="0.00"
                   name="finance_disposal_amount"
                   id="finance_disposal_amount"
                   value={
                     formData.finance_disposal_amount === ""
                       ? ""
-                      : formatNumber(formData.finance_disposal_amount)
+                      : formData.finance_disposal_amount
                   }
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -489,7 +490,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   type="file"
                   name="image"
                   id="image"
-                  required
+                  required={!edit}
                   className="w-full text-base font-semibold text-primary-800 bg-primary-100 border rounded cursor-pointer file:cursor-pointer file:border-0 file:py-2.5 file:px-4 file:mr-4 file:bg-primary-100 file:hover:bg-primary-200 file:text-primary-900"
                 />
                 {formData.card_image && (
@@ -497,6 +498,13 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                     Current file: {formData.card_image}
                   </p>
                 )}
+                <input
+                  type="hidden"
+                  name="image_reference"
+                  value={formData.card_image}
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
               </div>
               <div className="col-span-4">
                 <label
@@ -516,6 +524,13 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                     Current file: {formData.finance_purchase_invoice}
                   </p>
                 )}
+                <input
+                  type="hidden"
+                  name="invoice_reference"
+                  value={formData.finance_purchase_invoice}
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
               </div>
               <div className="col-span-4">
                 <label
@@ -536,6 +551,13 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                     Current file: {formData.technical_instructions}
                   </p>
                 )}
+                <input
+                  type="hidden"
+                  name="instructions_reference"
+                  value={formData.technical_instructions}
+                  onChange={handleInputChange}
+                  className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
+                />
               </div>
             </div>
 
@@ -559,19 +581,21 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
         <div className="flex flex-row p-6 px-12 py-8 justify-evenly space-x-7 max-h-96 bg-primary-800">
           <Image
             src={urls.image}
+            name="image_reference"
             alt="Asset Image"
             height={0}
             width={0}
             sizes="100vw"
             className="w-1/6 h-auto rounded-t-xl"
           />
-          <a href={urls.invoice} target="_blank" rel="noopener noreferrer">
+          <a href={urls.invoice} name='invoice_reference' target="_blank" rel="noopener noreferrer">
             View Invoice
           </a>
-          <a href={urls.instructions} target="_blank" rel="noopener noreferrer">
+          <a href={urls.instructions} name="instructions_reference" target="_blank" rel="noopener noreferrer">
             View Instructions
           </a>
         </div>
+        
       )}{" "}
     </>
   );
