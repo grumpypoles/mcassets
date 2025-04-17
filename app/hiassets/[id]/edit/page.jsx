@@ -39,7 +39,7 @@ const Page = () => {
 
     fetchData();
   }, [id]);
-console.log(equipmentData)
+
   if (!equipmentData && !loading) {
     return (
       <h1 className="mt-10 text-2xl font-bold text-center">

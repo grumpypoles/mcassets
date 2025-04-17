@@ -9,7 +9,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
     invoice: "",
     instructions: "",
   });
-  console.log(equipment);
+  
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
