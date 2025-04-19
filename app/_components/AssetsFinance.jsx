@@ -2,17 +2,24 @@ import { CalculatorIcon, KeyIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import Link from "next/link";
 
+
 const AssetsFinance = ({ eqData }) => {
   if (!eqData || eqData.length === 0) {
     return <p className="text-red-500">No financial data available.</p>;
   }
 
   const asset = eqData[0];
+ 
 
   // Check if invoice data exists
-  const pdf_urls = asset.finance_purchase_invoice
-    ? `/uploads/invoices/${encodeURIComponent(asset.finance_purchase_invoice)}`
-    : `/uploads/invoices/0000 Missing Invoice.pdf`;
+  const pdf_urls = asset.finance_purchase_invoice.filter(link => typeof link === 'string' && link.endsWith('.pdf'))
+ 
+  const pdfDescription = pdf_urls.some((url) =>
+    url.includes("0000_Missing_Invoice")
+  )
+    ? "0000 No Invoice.pdf"
+    : `${asset.selcode} - ${asset.card_description}.pdf`; 
+    
 
   return (
     <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">
@@ -93,7 +100,7 @@ const AssetsFinance = ({ eqData }) => {
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Invoice: <span style={{ textDecoration: 'underline' }}>{asset.finance_purchase_invoice || "N/A"}</span>
+                Invoice: <span style={{ textDecoration: 'underline' }}>{pdfDescription}</span>
               </a>
             </span>
           </li>

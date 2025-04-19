@@ -5,6 +5,8 @@ const AssetsTechnical = ({ eqData }) => {
     return <div className="p-4 text-center">No technical data available.</div>;
   }
 
+  // Extract the first item (assuming eqData is an array of assets)
+  const asset = eqData[0];
   const {
     technical_instructions = "0000 No Instructions.pdf",
     technical_category = "Unknown",
@@ -14,8 +16,18 @@ const AssetsTechnical = ({ eqData }) => {
     technical_maker_web = "",
   } = eqData[0] || {};
 
-  const pdf_urls = `/uploads/instructions/${technical_instructions}`;
+ 
+  const pdf_urls = technical_instructions.filter(
+    (link) => typeof link === "string" && link.endsWith(".pdf")
+  );
 
+  const pdfDescription = pdf_urls.some((url) =>
+    url.includes("0000_No_Instructions")
+  )
+    ? "0000 No Instructions.pdf"
+    : `${asset.selcode} - ${asset.card_description}.pdf`;
+  console.log(pdf_urls);
+  console.log(pdfDescription);
   return (
     <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">
       <span className="flex flex-row items-center w-full p-4 mb-4 text-2xl font-bold gap-x-2 bg-primary-400">
@@ -36,7 +48,8 @@ const AssetsTechnical = ({ eqData }) => {
           </li>
           <li>
             <span className="flex flex-row items-center w-full text-lg font-medium gap-x-2">
-              <KeyIcon className="w-6 h-6" /> Serial Number: {technical_serial_number}
+              <KeyIcon className="w-6 h-6" /> Serial Number:{" "}
+              {technical_serial_number}
             </span>
           </li>
           <li>
@@ -53,7 +66,10 @@ const AssetsTechnical = ({ eqData }) => {
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Maker WEB: <span style={{ textDecoration: 'underline' }}>{technical_maker_web}</span>
+                Maker WEB:{" "}
+                <span style={{ textDecoration: "underline" }}>
+                  {technical_maker_web}
+                </span>
               </a>
             </li>
           )}
@@ -66,7 +82,10 @@ const AssetsTechnical = ({ eqData }) => {
                 rel="noopener noreferrer"
               >
                 <KeyIcon className="w-6 h-6" />
-                Instructions: <span style={{ textDecoration: 'underline' }}>{technical_instructions}</span>
+                Instructions:{" "}
+                <span style={{ textDecoration: "underline" }}>
+                  {pdfDescription}
+                </span>
               </a>
             </li>
           )}

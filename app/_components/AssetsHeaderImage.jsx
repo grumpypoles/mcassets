@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 function AssetsHeaderImage({ eqData }) {
-  console.log("eqData", eqData); // Debug: Check the actual structure
+ 
 
   if (!eqData || eqData.length === 0) {
     return null; // Early return if no data
@@ -11,7 +11,7 @@ function AssetsHeaderImage({ eqData }) {
   const asset = eqData[0];
 
   // Debug: Log the exact value of card_image
-  console.log("card_image raw:", asset.card_image);
+  
 
   // Case 1: card_image is already an array (correct format)
   if (Array.isArray(asset.card_image)) {
