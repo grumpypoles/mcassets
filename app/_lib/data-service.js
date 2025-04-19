@@ -24,7 +24,7 @@ function handleSupabaseError(error, operation) {
 /** Get assets info data */
 export async function getAssets() {
   const { data, error } = await supabase
-    .from("hi_assets")
+    .from("hi_assets_dev")
     .select("*")
     // .range(0, 5)
 
@@ -41,7 +41,7 @@ export async function getAssets() {
 /**Get all data for specific asset */
 export async function getAssetsList(id) {
   const { data, error } = await supabase
-    .from("hi_assets")
+    .from("hi_assets_dev")
     .select("*")
     .eq("id", id);
 
@@ -260,7 +260,7 @@ export async function addAsset(formData) {
 
   // Post form data
   const { data: technicalDataInput, error: technicalError } = await supabase
-    .from("hi_assets")
+    .from("hi_assets_dev")
     .insert(newAssetData);
 
   if (technicalError)
@@ -326,7 +326,7 @@ export async function editAsset(formData) {
   //Post form data
 
   const { data: FinancialDataEdit, error: financialError } = await supabase
-    .from("hi_assets")
+    .from("hi_assets_dev")
     .update(newAssetData)
     .eq("selcode", selcode);
 
