@@ -9,7 +9,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
     invoice: "",
     instructions: "",
   });
-  
+
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -55,7 +55,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
           finance_disposal_date: asset.finance_disposal_date ?? "1990-01-01",
           finance_disposal_amount: asset.finance_disposal_amount ?? "0.00",
           finance_disposal_note: asset.finance_disposal_note ?? "",
-          is_active: asset.is_active ?? "",
+          is_active: asset.status ?? "",
           admin_creation_date: asset.admin_creation_date ?? "",
           admin_creation_user: asset.admin_creation_user ?? "",
           admin_update_date: asset.admin_update_date ?? "",
@@ -251,7 +251,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   type="text"
                   name="card_model"
                   id="card_model"
-                  required
                   value={formData.card_model}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -270,7 +269,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   type="text"
                   name="technical_model_number"
                   id="technical_model_number"
-                  required
                   value={formData.technical_model_number}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -287,7 +285,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   type="text"
                   name="technical_serial_number"
                   id="technical_serial_number"
-                  required
                   value={formData.technical_serial_number}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
@@ -385,7 +382,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   Maker URL
                 </label>
                 <input
-                  type="url"
+                  type="text"
                   name="technical_maker_web"
                   id="technical_maker_web"
                   value={formData.technical_maker_web}
@@ -407,10 +404,10 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   onChange={handleInputChange}
                   className="w-full px-6 py-3 text-base font-medium border rounded-md border-primary-200 bg-primary-100 text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"
                 >
-                  <option value="true" className="text-centre">
+                  <option value="Active" className="text-centre">
                     Active
                   </option>
-                  <option value="false" className="text-left">
+                  <option value="Inactive" className="text-left">
                     Inactive
                   </option>
                 </select>
@@ -588,14 +585,23 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
             sizes="100vw"
             className="w-1/6 h-auto rounded-t-xl"
           />
-          <a href={urls.invoice} name='invoice_reference' target="_blank" rel="noopener noreferrer">
+          <a
+            href={urls.invoice}
+            name="invoice_reference"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View Invoice
           </a>
-          <a href={urls.instructions} name="instructions_reference" target="_blank" rel="noopener noreferrer">
+          <a
+            href={urls.instructions}
+            name="instructions_reference"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             View Instructions
           </a>
         </div>
-        
       )}{" "}
     </>
   );
