@@ -11,13 +11,19 @@ const DetailRowRenderer = (params) => <AssetsDetails copiedRow={params.data} />;
 const EditRowRenderer = (params) => <AssetsEdit copiedRow={params.data} />;
 
 const ImageCellRenderer = (params) => {
-  const imageUrl = `/uploads/images/${params.value}`;
-  return params.value ? (
-    <img src={imageUrl} alt="Asset" style={{ width: "50px", height: "auto" }} />
+  const imageUrl = Array.isArray(params.value) ? params.value[0] : null;
+
+  return imageUrl ? (
+    <img
+      src={imageUrl}
+      alt="Asset"
+      style={{ width: "50px", height: "auto", display: "block", margin: "0 auto" }}
+    />
   ) : null;
 };
 
 const AssetsGrid = ({ rowData }) => {
+  
   const defaultColDef = useMemo(() => ({ flex: 1, editable: false }), []);
 
   const colDefs = useMemo(
