@@ -26,8 +26,8 @@ const AssetsTechnical = ({ eqData }) => {
   )
     ? "0000 No Instructions.pdf"
     : `${asset.selcode} - ${asset.card_description}.pdf`;
-  console.log(pdf_urls);
-  console.log(pdfDescription);
+
+      
   return (
     <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">
       <span className="flex flex-row items-center w-full p-4 mb-4 text-2xl font-bold gap-x-2 bg-primary-400">
