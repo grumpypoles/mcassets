@@ -68,7 +68,8 @@ const AssetsTechnical = ({ eqData }) => {
                 <KeyIcon className="w-6 h-6" />
                 Maker WEB:{" "}
                 <span style={{ textDecoration: "underline" }}>
-                  {technical_maker_web}
+                {technical_maker_web?.slice(0, 30)}
+                {technical_maker_web?.length > 30 && '...'}
                 </span>
               </a>
             </li>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { format } from "date-fns";
 import { addAsset, editAsset } from "@/app/_lib/data-service";
+import ShortUrlDisplay from "@/app/_lib/short_url";
 import Image from "next/image";
 
 const AssetsForm = ({ equipment, categories, locations, edit }) => {
@@ -9,6 +10,8 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
     invoice: "",
     instructions: "",
   });
+
+  console.log("Asset Form Data:", equipment);
 
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {
@@ -20,12 +23,12 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   useEffect(() => {
     if (edit && equipment) {
       setUrls({
-        image: asset.card_image ? `/uploads/images/${asset.card_image}` : "",
+        image: asset.card_image ? `${asset.card_image}` : "",
         invoice: asset.finance_purchase_invoice
-          ? `/uploads/invoices/${asset.finance_purchase_invoice}`
+          ? `${asset.finance_purchase_invoice}`
           : "",
         instructions: asset.technical_instructions
-          ? `/uploads/instructions/${asset.technical_instructions}`
+          ? `${asset.technical_instructions}`
           : "",
       });
     }
@@ -492,7 +495,8 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 />
                 {formData.card_image && (
                   <p className="mt-2 text-sm text-primary-200">
-                    Current file: {formData.card_image}
+                    Current file:{" "}
+                    <ShortUrlDisplay url={formData.card_image[0]} />
                   </p>
                 )}
                 <input
@@ -518,7 +522,10 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 />
                 {formData.finance_purchase_invoice && (
                   <p className="mt-2 text-sm text-primary-200">
-                    Current file: {formData.finance_purchase_invoice}
+                    Current file:{" "}
+                    <ShortUrlDisplay
+                      url={formData.finance_purchase_invoice[0]}
+                    />
                   </p>
                 )}
                 <input
@@ -545,7 +552,8 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                 />
                 {formData.technical_instructions && (
                   <p className="mt-2 text-sm text-primary-200">
-                    Current file: {formData.technical_instructions}
+                    Current file:{" "}
+                    <ShortUrlDisplay url={formData.technical_instructions[0]} />
                   </p>
                 )}
                 <input
