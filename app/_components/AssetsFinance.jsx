@@ -1,6 +1,7 @@
 import { CalculatorIcon, KeyIcon } from "@heroicons/react/24/solid";
 import { format } from "date-fns";
 import Link from "next/link";
+import { getPdfDescription } from "@/app/_lib/pdfDescription";
 
 
 const AssetsFinance = ({ eqData }) => {
@@ -14,12 +15,14 @@ const AssetsFinance = ({ eqData }) => {
   // Check if invoice data exists
   const pdf_urls = asset.finance_purchase_invoice.filter(link => typeof link === 'string' && link.endsWith('.pdf'))
  
-  const pdfDescription = pdf_urls.some((url) =>
-    url.includes("0000_Missing_Invoice")
-  )
-    ? "0000 No Invoice.pdf"
-    : `${asset.selcode} - ${asset.card_description}.pdf`; 
-    
+  // const pdfDescription = pdf_urls.some((url) =>
+  //   url.includes("0000_Missing_Invoice")
+  // )
+  //   ? "0000 No Invoice.pdf"
+  //   : `${asset.selcode} - ${asset.card_description}.pdf`; 
+
+  
+  const pdfDescription = getPdfDescription(pdf_urls, "invoice", eqData[0]);
 
   return (
     <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">

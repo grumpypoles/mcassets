@@ -218,6 +218,15 @@ export async function addAsset(formData) {
   const isValidFile = (file) =>
     file && file.size > 0 && file.name !== "undefined";
 
+
+
+// Upload Images
+const images = formData.getAll("image");
+const imageUrls = await UploadFiles(images, "ws_images");
+
+
+/*
+
   // Upload Image if it exists
   const imageFile = formData.get("image");
   const imageUrls = isValidFile(imageFile)
@@ -247,6 +256,10 @@ export async function addAsset(formData) {
     instructionUrls.length > 0
       ? path.basename(instructionUrls[0])
       : "0000 No Instructions.pdf";
+
+*/
+
+
 
   // Get form data
   const newAssetData = buildAssetsData(

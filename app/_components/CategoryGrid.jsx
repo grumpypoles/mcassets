@@ -4,21 +4,17 @@ import { AgGridReact } from "ag-grid-react";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { useMemo, useState } from "react";
-// import { updateCategory} from "@/app/_lib/mongo_actions";
-import { updateCategory} from "@/app/_lib/data-service";
+import { updateCategory } from "@/app/_lib/data-service";
 import DuplicateCategory from "@/app/_components/DuplicateCategory";
 // import DuplicateCategory from "@/app/_components/DuplicateCategory";
 
-
 const CopyRow = ({ data }) => (
-    <>
-      <div className="flex flex-col w-[100px]">
-        <DuplicateCategory copiedRow={data} />
-      </div>
-    </>
-  );
-  
-  
+  <>
+    <div className="flex flex-col w-[100px]">
+      <DuplicateCategory copiedRow={data} />
+    </div>
+  </>
+);
 
 const CategoryGrid = ({ rowData }) => {
   const defaultColDef = useMemo(
@@ -30,20 +26,19 @@ const CategoryGrid = ({ rowData }) => {
   );
 
   const [colDefs] = useState([
-   
     {
       field: "description",
       headerName: "Description",
       filter: true,
       maxWidth: 500,
     },
-     {
+    {
       field: "custom",
       headerName: "Copy",
       maxWidth: 80,
       tooltipValueGetter: () => "Copy Row",
       cellRenderer: (params) => <CopyRow data={params.data} />,
-    }
+    },
   ]);
 
   const handleCellValueChange = async (params) => {

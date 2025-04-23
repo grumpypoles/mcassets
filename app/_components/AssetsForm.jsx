@@ -12,6 +12,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   });
 
   console.log("Asset Form Data:", equipment);
+  
 
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {

@@ -2,8 +2,11 @@
 
 
 import { supabase } from "@/app/_lib/supabase";
+import cloudinary from "@/app/_config/cloudinary";
+
 
 async function delete_item(eqData) {
+
   
   const perma_image ="AssetImageMissing.jpg" 
   const perma_invoice = "0000 Missing Invoice.pdf"

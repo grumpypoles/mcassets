@@ -1,4 +1,5 @@
 import { KeyIcon, WrenchScrewdriverIcon } from "@heroicons/react/24/solid";
+import { getPdfDescription } from "@/app/_lib/pdfDescription";
 
 const AssetsTechnical = ({ eqData }) => {
   if (!eqData || eqData.length === 0) {
@@ -21,12 +22,12 @@ const AssetsTechnical = ({ eqData }) => {
     (link) => typeof link === "string" && link.endsWith(".pdf")
   );
 
-  const pdfDescription = pdf_urls.some((url) =>
-    url.includes("0000_No_Instructions")
-  )
-    ? "0000 No Instructions.pdf"
-    : `${asset.selcode} - ${asset.card_description}.pdf`;
-
+  // const pdfDescription = pdf_urls.some((url) =>
+  //   url.includes("0000_No_Instructions")
+  // )
+  //   ? "0000 No Instructions.pdf"
+  //   : `${asset.selcode} - ${asset.card_description}.pdf`;
+  const pdfDescription = getPdfDescription(pdf_urls, "instruction", eqData[0])
       
   return (
     <div className="flex flex-col items-center justify-top text-primary-800 bg-primary-200">
