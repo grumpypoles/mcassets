@@ -22,10 +22,10 @@ export default function Page() {
             href={`/hiassets/add`}
             className="flex items-center mb-2 text-2xl font-semibold text-primary-300"
           >
-            <span className="flex flex-row justify-end w-full mt-2 text-xl font-medium gap-x-2">
+            {/* <span className="flex flex-row justify-end w-full mt-2 text-xl font-medium gap-x-2">
               Add
               <ArrowRightIcon className="w-6 h-6 mr-2" />
-            </span>
+            </span> */}
           </Link>
         </div>
       </div>

@@ -1,6 +1,6 @@
 import Spinner from "@/app/_components/Spinner";
 import { Suspense } from "react";
-// import ReportsList from "@/app/_components/ReportsList";
+import ReportsList from "@/app/_components/ReportsList";
 
 export const metadata = {
   title: "Pivots",
@@ -9,12 +9,12 @@ export const metadata = {
 export default function Page() {
   return (
     <div>
-      <h1 className="mb-5 text-4xl font-medium text-primary-500">
+      {/* <h1 className="mb-5 text-4xl font-medium text-primary-500">
         Reporting
-      </h1>
-      
+      </h1> */}
+
       <Suspense fallback={<Spinner />}>
-        {/* <ReportsList /> */}
+        <ReportsList />
       </Suspense>
     </div>
   );

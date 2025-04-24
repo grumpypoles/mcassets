@@ -10,7 +10,7 @@ function ChartAssetsBarCategory({ rowData }) {
     seriesDefaults: {},
     data: rowData,
     title: {
-      text: "Assets Purchased per Year",
+      text: "Annual Purchases",
       // color: ["#99B0C7"],
     },
     theme: "ag-vivid-dark",

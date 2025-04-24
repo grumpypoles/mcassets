@@ -24,7 +24,7 @@ function handleSupabaseError(error, operation) {
 /** Get assets info data */
 export async function getAssets() {
   const { data, error } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .select("*")
     // .range(0, 5)
 
@@ -41,7 +41,7 @@ export async function getAssets() {
 /**Get all data for specific asset */
 export async function getAssetsList(id) {
   const { data, error } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .select("*")
     .eq("id", id);
 
@@ -273,7 +273,7 @@ const imageUrls = await UploadFiles(images, "ws_images");
 
   // Post form data
   const { data: technicalDataInput, error: technicalError } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .insert(newAssetData);
 
   if (technicalError)
@@ -339,7 +339,7 @@ export async function editAsset(formData) {
   //Post form data
 
   const { data: FinancialDataEdit, error: financialError } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .update(newAssetData)
     .eq("selcode", selcode);
 

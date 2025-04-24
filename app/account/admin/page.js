@@ -1,8 +1,10 @@
+import ChartAssetBar from "@/app/_components/ChartAssetBar";
+import ChartAssetsPies from "@/app/_components/ChartAssetsPies";
 import { auth } from "@/app/_lib/auth";
 
 export const metadata = {
-  title: 'admin',
-}
+  title: "Account",
+};
 
 export default async function Page() {
   const session = await auth();
@@ -14,7 +16,15 @@ export default async function Page() {
         Welcome, {fName} to your dashboard.
       </h1>
       <div className="grid grid-cols-1 gap-4">
+        <div>
+          <ChartAssetsPies />
+        </div>
+
        
+        <div className="col-span-2">
+          <ChartAssetBar />
+         
+        </div>
       </div>
     </>
   );

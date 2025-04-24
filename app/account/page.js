@@ -1,8 +1,6 @@
-import { auth } from "@/app/_lib/auth";
-import { getActivities } from "@/app/_lib/data-service";
-import { getRecreationsStatistics, getSwimStats } from "@/app/_lib/statistics";
-import ChartAssetsPies from "@/app/_components/ChartAssetsPies";
 import ChartAssetBar from "@/app/_components/ChartAssetBar";
+import ChartAssetsPies from "@/app/_components/ChartAssetsPies";
+import { auth } from "@/app/_lib/auth";
 
 export const metadata = {
   title: "Account",
