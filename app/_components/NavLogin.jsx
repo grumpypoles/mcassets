@@ -19,8 +19,24 @@ export default async function NavLogin() {
                 Assets
               </Link>
             </li>
-            <li className="flex items-center">
+            <li>
+              <Link
+                href="/reports"
+                className="px-3 py-2 transition-colors hover:bg-primary-700"
+              >
+                Reporting
+              </Link>
+            </li>
+            {/* <li className="flex items-center">
               <NavDropDown />
+            </li> */}
+            <li>
+              <Link
+                href="/account"
+                className="px-3 py-2 transition-colors hover:bg-primary-700"
+              >
+                Settings
+              </Link>
             </li>
             <li></li>
             <li>

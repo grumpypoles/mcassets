@@ -1,7 +1,7 @@
 import { auth } from "@/app/_lib/auth";
 
 export const metadata = {
-  title: 'Wind Power',
+  title: 'admin',
 }
 
 export default async function Page() {

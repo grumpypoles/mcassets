@@ -2,5 +2,5 @@ import {auth} from "@/app/_lib/auth"
 
 export const middleware = auth
 export const config = {
-    matcher: ["/account/:path*",   "/hiassets/:path*",]
+    matcher: ["/account/:path*",   "/hiassets/:path*",  "/reports/:path*"],
 }
