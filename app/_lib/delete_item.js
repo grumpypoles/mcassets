@@ -2,7 +2,7 @@
 
 
 import { supabase } from "@/app/_lib/supabase";
-import cloudinary from "@/app/_config/cloudinary";
+import cloudinary from "@/app/_lib/cloudinary";
 
 
 async function delete_item(eqData) {

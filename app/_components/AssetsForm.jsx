@@ -20,7 +20,9 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
       maximumFractionDigits: 2,
     }).format(value);
   };
+
   const asset = edit && equipment ? equipment[0] : null;
+  
   useEffect(() => {
     if (edit && equipment) {
       setUrls({

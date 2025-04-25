@@ -35,7 +35,7 @@ export default async function NavLogin() {
                 href="/account"
                 className="px-3 py-2 transition-colors hover:bg-primary-700"
               >
-                Settings
+                Dashboard
               </Link>
             </li>
             <li></li>

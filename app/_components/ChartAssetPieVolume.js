@@ -14,7 +14,7 @@ function ChartAssetPieVolume({ rowData}) {
     data: rowData,
     
     title: {
-      text: "Assets - Value by Category",
+      text: "Volume by Category",
     },
     theme: "ag-vivid-dark",
     // subtitle:{

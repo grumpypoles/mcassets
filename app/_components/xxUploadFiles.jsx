@@ -1,6 +1,6 @@
 "use server";
 
-import cloudinary from "@/app/_config/cloudinary"; 
+import cloudinary from "@/app/_lib/cloudinary"; 
 
 
 export async function xxUploadFiles(files, folder) {

@@ -18,13 +18,159 @@ function handleSupabaseError(error, operation) {
   throw new Error(`${operation} failed. Please try again later.`);
 }
 
+
+
+//* Asset Form */
+
+//Add new asset
+
+export async function addAsset(formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  // Helper function to determine if a file is valid
+  const isValidFile = (file) =>
+    file && file.size > 0 && file.name !== "undefined";
+
+
+
+// Upload Images
+const images = formData.getAll("image");
+const imageUrls = await UploadFiles(images, "ws_images");
+
+
+/*
+
+  // Upload Image if it exists
+  const imageFile = formData.get("image");
+  const imageUrls = isValidFile(imageFile)
+    ? await UploadFiles([imageFile], "images")
+    : [];
+  const imageName =
+    imageUrls.length > 0
+      ? path.basename(imageUrls[0])
+      : "AssetImageMissing.jpg";
+
+  // Upload Invoice if it exists
+  const invoiceFile = formData.get("invoice");
+  const invoiceUrls = isValidFile(invoiceFile)
+    ? await UploadFiles([invoiceFile], "invoices")
+    : [];
+  const invoiceName =
+    invoiceUrls.length > 0
+      ? path.basename(invoiceUrls[0])
+      : "0000 Missing Invoice.pdf";
+
+  // Upload Instruction if it exists
+  const instructionFile = formData.get("instructions");
+  const instructionUrls = isValidFile(instructionFile)
+    ? await UploadFiles([instructionFile], "instructions")
+    : [];
+  const instructionName =
+    instructionUrls.length > 0
+      ? path.basename(instructionUrls[0])
+      : "0000 No Instructions.pdf";
+
+*/
+
+
+
+  // Get form data
+  const newAssetData = buildAssetsData(
+    formData,
+    { name: imageName },
+    { name: instructionName },
+    { name: invoiceName },
+    session.user.appUserId,
+    "add"
+  );
+
+  // Post form data
+  const { data: technicalDataInput, error: technicalError } = await supabase
+    .from("hi_assets_dev")
+    .insert(newAssetData);
+
+  if (technicalError)
+    handleSupabaseError(technicalError, "Inserting asset data");
+
+  revalidatePath("/hiassets");
+}
+
+//Edit existing board
+export async function editAsset(formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  // Helper function to determine if a file is valid
+  const isValidFile = (file) =>
+    file && file.size > 0 && file.name !== "undefined";
+
+  // Upload Image if it exists
+  const imageFile = formData.get("image");
+  const imageUrls = isValidFile(imageFile)
+    ? await UploadFiles([imageFile], "images")
+    : [];
+  const imageName =
+    imageUrls.length > 0
+      ? path.basename(imageUrls[0])
+      : formData.get("image_reference"); // Use the existing image reference if no new image is uploaded
+  // Upload Invoice if it exists
+  const invoiceFile = formData.get("invoice");
+  const invoiceUrls = isValidFile(invoiceFile)
+    ? await UploadFiles([invoiceFile], "invoices")
+    : [];
+  const invoiceName =
+    invoiceUrls.length > 0
+      ? path.basename(invoiceUrls[0])
+      : formData.get("invoice_reference"); // Use the existing invoice reference if no new invoice is uploaded
+
+  // Upload Instruction if it exists
+  const instructionFile = formData.get("instructions");
+  const instructionUrls = isValidFile(instructionFile)
+    ? await UploadFiles([instructionFile], "instructions")
+    : [];
+  const instructionName =
+    instructionUrls.length > 0
+      ? path.basename(instructionUrls[0])
+      : formData.get("instructions_reference");
+
+      
+  // Set the selcode
+  const selcode = formData.get("selcode");
+
+  // Get form data
+
+  // Get form data
+  const newAssetData = buildAssetsData(
+    formData,
+    { name: imageName },
+    { name: instructionName },
+    { name: invoiceName },
+    session.user.appUserId,
+    "edit"
+  );
+
+  //Post form data
+
+  const { data: FinancialDataEdit, error: financialError } = await supabase
+    .from("hi_assets_dev")
+    .update(newAssetData)
+    .eq("selcode", selcode);
+
+  if (financialError)
+    handleSupabaseError(financialError, "Updating asset data");
+
+  revalidatePath("/hiassets");
+}
+
+
 /////////////
 // GET
 
 /** Get assets info data */
 export async function getAssets() {
   const { data, error } = await supabase
-    .from("hi_assets_web")
+    .from("hi_assets_dev")
     .select("*")
     // .range(0, 5)
 
@@ -41,7 +187,7 @@ export async function getAssets() {
 /**Get all data for specific asset */
 export async function getAssetsList(id) {
   const { data, error } = await supabase
-    .from("hi_assets_web")
+    .from("hi_assets_dev")
     .select("*")
     .eq("id", id);
 
@@ -164,6 +310,8 @@ export async function duplicateLocation(copiedRow) {
 /////////////
 // UPDATES
 
+/* Category */
+
 export async function updateCategory(params) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
@@ -184,6 +332,8 @@ export async function updateCategory(params) {
 
   revalidatePath("/account/admin/categories");
 }
+
+/* Location */
 
 export async function updateLocation(params) {
   const session = await auth();
@@ -206,145 +356,3 @@ export async function updateLocation(params) {
   revalidatePath("/account/admin/locations");
 }
 
-//* Asset Form */
-
-//Add new asset
-
-export async function addAsset(formData) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
-
-  // Helper function to determine if a file is valid
-  const isValidFile = (file) =>
-    file && file.size > 0 && file.name !== "undefined";
-
-
-
-// Upload Images
-const images = formData.getAll("image");
-const imageUrls = await UploadFiles(images, "ws_images");
-
-
-/*
-
-  // Upload Image if it exists
-  const imageFile = formData.get("image");
-  const imageUrls = isValidFile(imageFile)
-    ? await UploadFiles([imageFile], "images")
-    : [];
-  const imageName =
-    imageUrls.length > 0
-      ? path.basename(imageUrls[0])
-      : "AssetImageMissing.jpg";
-
-  // Upload Invoice if it exists
-  const invoiceFile = formData.get("invoice");
-  const invoiceUrls = isValidFile(invoiceFile)
-    ? await UploadFiles([invoiceFile], "invoices")
-    : [];
-  const invoiceName =
-    invoiceUrls.length > 0
-      ? path.basename(invoiceUrls[0])
-      : "0000 Missing Invoice.pdf";
-
-  // Upload Instruction if it exists
-  const instructionFile = formData.get("instructions");
-  const instructionUrls = isValidFile(instructionFile)
-    ? await UploadFiles([instructionFile], "instructions")
-    : [];
-  const instructionName =
-    instructionUrls.length > 0
-      ? path.basename(instructionUrls[0])
-      : "0000 No Instructions.pdf";
-
-*/
-
-
-
-  // Get form data
-  const newAssetData = buildAssetsData(
-    formData,
-    { name: imageName },
-    { name: instructionName },
-    { name: invoiceName },
-    session.user.appUserId,
-    "add"
-  );
-
-  // Post form data
-  const { data: technicalDataInput, error: technicalError } = await supabase
-    .from("hi_assets_web")
-    .insert(newAssetData);
-
-  if (technicalError)
-    handleSupabaseError(technicalError, "Inserting asset data");
-
-  revalidatePath("/hiassets");
-}
-
-//Edit existing board
-export async function editAsset(formData) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
-
-  // Helper function to determine if a file is valid
-  const isValidFile = (file) =>
-    file && file.size > 0 && file.name !== "undefined";
-
-  // Upload Image if it exists
-  const imageFile = formData.get("image");
-  const imageUrls = isValidFile(imageFile)
-    ? await UploadFiles([imageFile], "images")
-    : [];
-  const imageName =
-    imageUrls.length > 0
-      ? path.basename(imageUrls[0])
-      : formData.get("image_reference"); // Use the existing image reference if no new image is uploaded
-  // Upload Invoice if it exists
-  const invoiceFile = formData.get("invoice");
-  const invoiceUrls = isValidFile(invoiceFile)
-    ? await UploadFiles([invoiceFile], "invoices")
-    : [];
-  const invoiceName =
-    invoiceUrls.length > 0
-      ? path.basename(invoiceUrls[0])
-      : formData.get("invoice_reference"); // Use the existing invoice reference if no new invoice is uploaded
-
-  // Upload Instruction if it exists
-  const instructionFile = formData.get("instructions");
-  const instructionUrls = isValidFile(instructionFile)
-    ? await UploadFiles([instructionFile], "instructions")
-    : [];
-  const instructionName =
-    instructionUrls.length > 0
-      ? path.basename(instructionUrls[0])
-      : formData.get("instructions_reference");
-
-      
-  // Set the selcode
-  const selcode = formData.get("selcode");
-
-  // Get form data
-
-  // Get form data
-  const newAssetData = buildAssetsData(
-    formData,
-    { name: imageName },
-    { name: instructionName },
-    { name: invoiceName },
-    session.user.appUserId,
-    "edit"
-  );
-
-  //Post form data
-
-  const { data: FinancialDataEdit, error: financialError } = await supabase
-    .from("hi_assets_web")
-    .update(newAssetData)
-    .eq("selcode", selcode);
-
-  if (financialError)
-    handleSupabaseError(financialError, "Updating asset data");
-
-  revalidatePath("/hiassets");
-}
