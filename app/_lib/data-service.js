@@ -59,7 +59,7 @@ const imageUrls = await UploadFiles(images, "ws_images");
   const invoiceName =
     invoiceUrls.length > 0
       ? path.basename(invoiceUrls[0])
-      : "0000 Missing Invoice.pdf";
+      : "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf";
 
   // Upload Instruction if it exists
   const instructionFile = formData.get("instructions");
@@ -87,7 +87,7 @@ const imageUrls = await UploadFiles(images, "ws_images");
 
   // Post form data
   const { data: technicalDataInput, error: technicalError } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .insert(newAssetData);
 
   if (technicalError)
@@ -96,7 +96,7 @@ const imageUrls = await UploadFiles(images, "ws_images");
   revalidatePath("/hiassets");
 }
 
-//Edit existing board
+//Edit existing asset
 export async function editAsset(formData) {
   const session = await auth();
   if (!session) throw new Error("You must be logged in");
@@ -153,7 +153,7 @@ export async function editAsset(formData) {
   //Post form data
 
   const { data: FinancialDataEdit, error: financialError } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .update(newAssetData)
     .eq("selcode", selcode);
 
@@ -170,7 +170,7 @@ export async function editAsset(formData) {
 /** Get assets info data */
 export async function getAssets() {
   const { data, error } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .select("*")
     // .range(0, 5)
 
@@ -187,7 +187,7 @@ export async function getAssets() {
 /**Get all data for specific asset */
 export async function getAssetsList(id) {
   const { data, error } = await supabase
-    .from("hi_assets_dev")
+    .from("hi_assets_web")
     .select("*")
     .eq("id", id);
 
