@@ -18,8 +18,6 @@ function handleSupabaseError(error, operation) {
   throw new Error(`${operation} failed. Please try again later.`);
 }
 
-
-
 //* Asset Form */
 
 //Add new asset
@@ -32,14 +30,13 @@ export async function addAsset(formData) {
   const isValidFile = (file) =>
     file && file.size > 0 && file.name !== "undefined";
 
-
+  /*
 
 // Upload Images
 const images = formData.getAll("image");
 const imageUrls = await UploadFiles(images, "ws_images");
 
 
-/*
 
   // Upload Image if it exists
   const imageFile = formData.get("image");
@@ -73,7 +70,9 @@ const imageUrls = await UploadFiles(images, "ws_images");
 
 */
 
-
+const imageName = "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp"
+const invoiceName  =  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf"
+const instructionName = ["https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf"]
 
   // Get form data
   const newAssetData = buildAssetsData(
@@ -134,7 +133,6 @@ export async function editAsset(formData) {
       ? path.basename(instructionUrls[0])
       : formData.get("instructions_reference");
 
-      
   // Set the selcode
   const selcode = formData.get("selcode");
 
@@ -162,7 +160,6 @@ export async function editAsset(formData) {
 
   revalidatePath("/hiassets");
 }
-
 
 /////////////
 // GET
@@ -355,4 +352,3 @@ export async function updateLocation(params) {
 
   revalidatePath("/account/admin/locations");
 }
-
