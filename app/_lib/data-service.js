@@ -22,65 +22,64 @@ function handleSupabaseError(error, operation) {
 
 //Add new asset
 
-export async function addAsset(formData) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
+export async function addAsset(formData, userId) {
+  // Upload Images
+  const images = formData.getAll("image");
 
-  // Helper function to determine if a file is valid
-  const isValidFile = (file) =>
-    file && file.size > 0 && file.name !== "undefined";
+  const DEFAULT_IMAGE_URL = [
+    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
+  ];
 
-  /*
+  const hasValidImages =
+    images.length > 0 && images.some((file) => file && file.size > 0);
 
-// Upload Images
-const images = formData.getAll("image");
-const imageUrls = await UploadFiles(images, "ws_images");
+  const imageUrls = hasValidImages
+    ? await UploadFiles(images, "ass_images")
+    : DEFAULT_IMAGE_URL;
 
+  // Upload Invoices
+  const invoices = formData.getAll("invoice");
 
+  const DEFAULT_INVOICE_URL = [
+    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
+  ];
 
-  // Upload Image if it exists
-  const imageFile = formData.get("image");
-  const imageUrls = isValidFile(imageFile)
-    ? await UploadFiles([imageFile], "images")
-    : [];
-  const imageName =
-    imageUrls.length > 0
-      ? path.basename(imageUrls[0])
-      : "AssetImageMissing.jpg";
+  const hasValidInvoices =
+    invoices.length > 0 && invoices.some((file) => file && file.size > 0);
 
-  // Upload Invoice if it exists
-  const invoiceFile = formData.get("invoice");
-  const invoiceUrls = isValidFile(invoiceFile)
-    ? await UploadFiles([invoiceFile], "invoices")
-    : [];
-  const invoiceName =
-    invoiceUrls.length > 0
-      ? path.basename(invoiceUrls[0])
-      : "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf";
+  const invoiceUrls = hasValidInvoices
+    ? await UploadFiles(invoices, "ass_invoices")
+    : DEFAULT_INVOICE_URL;
 
-  // Upload Instruction if it exists
-  const instructionFile = formData.get("instructions");
-  const instructionUrls = isValidFile(instructionFile)
-    ? await UploadFiles([instructionFile], "instructions")
-    : [];
-  const instructionName =
-    instructionUrls.length > 0
-      ? path.basename(instructionUrls[0])
-      : "0000 No Instructions.pdf";
+  // Upload Instructions
+  const instructions = formData.getAll("instructions");
 
-*/
+  const DEFAULT_INSTRUCTION_URL = [
+    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
+  ];
 
-const imageName = "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp"
-const invoiceName  =  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf"
-const instructionName = ["https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf"]
+  const hasValidInstructions =
+    instructions.length > 0 &&
+    instructions.some((file) => file && file.size > 0);
+
+  const instructionUrls = hasValidInstructions
+    ? await UploadFiles(instructions, "ass_instructions")
+    : DEFAULT_INSTRUCTION_URL;
+
+  //Temporary userId
+  userId = userId || 5;
+
+  // const imageName = "[https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp"]
+  // const invoiceName  = ["https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf"]
+  // const instructionName = ["https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf"]
 
   // Get form data
   const newAssetData = buildAssetsData(
     formData,
-    { name: imageName },
-    { name: instructionName },
-    { name: invoiceName },
-    session.user.appUserId,
+    { name: imageUrls },
+    { name: instructionUrls },
+    { name: invoiceUrls },
+    userId,
     "add"
   );
 
