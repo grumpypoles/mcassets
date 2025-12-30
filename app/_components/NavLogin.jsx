@@ -2,6 +2,7 @@ import Link from "next/link";
 import { auth } from "@/app/_lib/auth";
 import SignOutButton from "./SignOutButton";
 import NavDropDown from "./NavDropDown";
+import Image from "next/image";
 
 export default async function NavLogin() {
   const session = await auth();
@@ -48,10 +49,12 @@ export default async function NavLogin() {
               </Link>
             </li>
             <li className="flex items-center">
-              <img
-                className="h-8 rounded-full"
+              <Image
                 src={session.user.image}
-                alt={session.user.name}
+                alt={session.user.name || "User avatar"}
+                width={32}
+                height={32}
+                className="rounded-full"
                 referrerPolicy="no-referrer"
               />
               <span>

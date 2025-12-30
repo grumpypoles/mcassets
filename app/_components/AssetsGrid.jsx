@@ -2,6 +2,7 @@
 
 import AssetsDetails from "@/app/_components/AssetsDetails";
 import AssetsEdit from "@/app/_components/AssetsEdit";
+import Image from "next/image";
 import "ag-grid-community/styles/ag-grid.css";
 import "ag-grid-community/styles/ag-theme-quartz.css";
 import { AgGridReact } from "ag-grid-react";
@@ -14,11 +15,13 @@ const ImageCellRenderer = (params) => {
   const imageUrl = Array.isArray(params.value) ? params.value[0] : null;
 
   return imageUrl ? (
-    <img
-      src={imageUrl}
-      alt="Asset"
-      style={{ width: "50px", height: "auto", display: "block", margin: "0 auto" }}
-    />
+    <Image
+    src={imageUrl}
+    alt="Asset"
+    width={50}
+    height={50}
+    style={{ height: "auto", display: "block", margin: "0 auto" }}
+  />
   ) : null;
 };
 

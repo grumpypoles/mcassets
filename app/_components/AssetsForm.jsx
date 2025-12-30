@@ -12,7 +12,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   });
 
   console.log("Asset Form Data:", equipment);
-  
 
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {
@@ -22,17 +21,22 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   };
 
   const asset = edit && equipment ? equipment[0] : null;
-  
+
   useEffect(() => {
     if (edit && equipment) {
+      // setUrls({
+      //   image: asset.card_image ? `${asset.card_image}` : "",
+      //   invoice: asset.finance_purchase_invoice
+      //     ? `${asset.finance_purchase_invoice}`
+      //     : "",
+      //   instructions: asset.technical_instructions
+      //     ? `${asset.technical_instructions}`
+      //     : "",
+      // });
       setUrls({
-        image: asset.card_image ? `${asset.card_image}` : "",
-        invoice: asset.finance_purchase_invoice
-          ? `${asset.finance_purchase_invoice}`
-          : "",
-        instructions: asset.technical_instructions
-          ? `${asset.technical_instructions}`
-          : "",
+        image: asset?.card_image ?? "",
+        invoice: asset?.finance_purchase_invoice ?? "",
+        instructions: asset?.technical_instructions ?? "",
       });
     }
   }, [edit, equipment]);
