@@ -1,13 +1,12 @@
 "use server";
 
-import { supabase } from "./supabase";
-import { notFound } from "next/navigation";
-import { revalidatePath } from "next/cache";
-import path from "path";
-import fs from "fs";
+import { UploadFiles } from "@/app/_components/UploadFiles";
 import { auth } from "@/app/_lib/auth";
 import { buildAssetsData } from "@/app/_lib/helpers";
-import { UploadFiles } from "@/app/_components/UploadFiles";
+import { revalidatePath } from "next/cache";
+import { notFound } from "next/navigation";
+import path from "path";
+import { supabase } from "./supabase";
 
 // //For Testing
 // await new Promise((res)=> setTimeout(res, 3000))
