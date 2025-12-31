@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { updateProfile } from "@/app/_lib/actions";
+import { updateProfileAction } from "@/app/_lib/actions";
 import ActionButton from "@/app/_components/ActionButton";
 
 function UpdateProfileForm({ appUser, children }) {
@@ -15,7 +15,7 @@ function UpdateProfileForm({ appUser, children }) {
 
   return (
     <form
-      action={updateProfile}
+      action={updateProfileAction}
       className="flex flex-col gap-6 px-12 py-8 text-lg bg-primary-900"
     >
       <div className="space-y-2">
