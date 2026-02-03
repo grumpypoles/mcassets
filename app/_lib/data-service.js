@@ -4,6 +4,7 @@ import { UploadFiles } from "@/app/_components/UploadFiles";
 import { auth } from "@/app/_lib/auth";
 import { buildAssetsData } from "@/app/_lib/helpers";
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation"
 import { notFound } from "next/navigation";
 import path from "path";
 import { supabase } from "./supabase";
@@ -16,6 +17,17 @@ function handleSupabaseError(error, operation) {
   console.error(`${operation} failed:`, error);
   throw new Error(`${operation} failed. Please try again later.`);
 }
+const DEFAULT_IMAGE_URL = [
+    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
+  ];
+
+  const DEFAULT_INVOICE_URL = [
+    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
+  ];
+
+  const DEFAULT_INSTRUCTION_URL = [
+    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
+  ];
 
 //* Asset Form */
 
@@ -25,9 +37,9 @@ export async function addAsset(formData, userId) {
   // Upload Images
   const images = formData.getAll("image");
 
-  const DEFAULT_IMAGE_URL = [
-    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
-  ];
+  // const DEFAULT_IMAGE_URL = [
+  //   "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
+  // ];
 
   const hasValidImages =
     images.length > 0 && images.some((file) => file && file.size > 0);
@@ -39,9 +51,9 @@ export async function addAsset(formData, userId) {
   // Upload Invoices
   const invoices = formData.getAll("invoice");
 
-  const DEFAULT_INVOICE_URL = [
-    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
-  ];
+  // const DEFAULT_INVOICE_URL = [
+  //   "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
+  // ];
 
   const hasValidInvoices =
     invoices.length > 0 && invoices.some((file) => file && file.size > 0);
@@ -53,9 +65,9 @@ export async function addAsset(formData, userId) {
   // Upload Instructions
   const instructions = formData.getAll("instructions");
 
-  const DEFAULT_INSTRUCTION_URL = [
-    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
-  ];
+  // const DEFAULT_INSTRUCTION_URL = [
+  //   "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
+  // ];
 
   const hasValidInstructions =
     instructions.length > 0 &&
@@ -68,10 +80,7 @@ export async function addAsset(formData, userId) {
   //Temporary userId
   userId = userId || 5;
 
-  // const imageName = "[https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp"]
-  // const invoiceName  = ["https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf"]
-  // const instructionName = ["https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf"]
-
+  
   // Get form data
   const newAssetData = buildAssetsData(
     formData,
@@ -81,27 +90,36 @@ export async function addAsset(formData, userId) {
     userId,
     "add"
   );
-
+  
   // Post form data
   const { data: technicalDataInput, error: technicalError } = await supabase
-    .from("hi_assets_web")
-    .insert(newAssetData);
-
+  .from("hi_assets_web")
+  .insert(newAssetData);
+  
   if (technicalError)
     handleSupabaseError(technicalError, "Inserting asset data");
 
+  // Refresh the grid page
   revalidatePath("/hiassets");
+  
+  // Navigate the user to the grid
+  redirect("/hiassets");
+  
 }
+//* Asset Form */
 
 //Edit existing asset
 export async function editAsset(formData) {
-  const session = await auth();
-  if (!session) throw new Error("You must be logged in");
+  // const session = await auth();
+  // if (!session) throw new Error("You must be logged in");
 
+ 
+
+  
   // Helper function to determine if a file is valid
   const isValidFile = (file) =>
     file && file.size > 0 && file.name !== "undefined";
-
+  
   // Upload Image if it exists
   const imageFile = formData.get("image");
   const imageUrls = isValidFile(imageFile)
@@ -111,6 +129,7 @@ export async function editAsset(formData) {
     imageUrls.length > 0
       ? path.basename(imageUrls[0])
       : formData.get("image_reference"); // Use the existing image reference if no new image is uploaded
+
   // Upload Invoice if it exists
   const invoiceFile = formData.get("invoice");
   const invoiceUrls = isValidFile(invoiceFile)
@@ -157,6 +176,7 @@ export async function editAsset(formData) {
     handleSupabaseError(financialError, "Updating asset data");
 
   revalidatePath("/hiassets");
+  redirect("/hiassets");
 }
 
 /////////////
@@ -281,6 +301,7 @@ export async function duplicateCategory(copiedRow) {
   if (error) throw new Error("Assets Categories could not be copied");
 
   revalidatePath("/account/admin/categories");
+  redirect("/account/admin/categories");
 }
 
 export async function duplicateLocation(copiedRow) {
@@ -300,6 +321,7 @@ export async function duplicateLocation(copiedRow) {
   if (error) throw new Error("Assets Location could not be copied");
 
   revalidatePath("/account/admin/location");
+  redirect("/account/admin/location");
 }
 
 /////////////
@@ -326,6 +348,7 @@ export async function updateCategory(params) {
   if (error) throw new Error("Asset Category data could not be updated");
 
   revalidatePath("/account/admin/categories");
+  redirect("/account/admin/categories");
 }
 
 /* Location */
@@ -349,4 +372,5 @@ export async function updateLocation(params) {
   if (error) throw new Error("Asset Location data could not be updated");
 
   revalidatePath("/account/admin/locations");
+  redirect("/account/admin/locations");
 }
