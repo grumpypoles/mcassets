@@ -4,11 +4,11 @@ import { UploadFiles } from "@/app/_components/UploadFiles";
 import { auth } from "@/app/_lib/auth";
 import { buildAssetsData } from "@/app/_lib/helpers";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 import { notFound } from "next/navigation";
 import path from "path";
 import { supabase } from "./supabase";
-
+import { deleteCloudinaryFile } from "./deleteCloudinaryFiles";
 // //For Testing
 // await new Promise((res)=> setTimeout(res, 3000))
 
@@ -18,16 +18,16 @@ function handleSupabaseError(error, operation) {
   throw new Error(`${operation} failed. Please try again later.`);
 }
 const DEFAULT_IMAGE_URL = [
-    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
-  ];
+  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
+];
 
-  const DEFAULT_INVOICE_URL = [
-    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
-  ];
+const DEFAULT_INVOICE_URL = [
+  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
+];
 
-  const DEFAULT_INSTRUCTION_URL = [
-    "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
-  ];
+const DEFAULT_INSTRUCTION_URL = [
+  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
+];
 
 //* Asset Form */
 
@@ -36,10 +36,6 @@ const DEFAULT_IMAGE_URL = [
 export async function addAsset(formData, userId) {
   // Upload Images
   const images = formData.getAll("image");
-
-  // const DEFAULT_IMAGE_URL = [
-  //   "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
-  // ];
 
   const hasValidImages =
     images.length > 0 && images.some((file) => file && file.size > 0);
@@ -51,10 +47,6 @@ export async function addAsset(formData, userId) {
   // Upload Invoices
   const invoices = formData.getAll("invoice");
 
-  // const DEFAULT_INVOICE_URL = [
-  //   "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
-  // ];
-
   const hasValidInvoices =
     invoices.length > 0 && invoices.some((file) => file && file.size > 0);
 
@@ -64,10 +56,6 @@ export async function addAsset(formData, userId) {
 
   // Upload Instructions
   const instructions = formData.getAll("instructions");
-
-  // const DEFAULT_INSTRUCTION_URL = [
-  //   "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
-  // ];
 
   const hasValidInstructions =
     instructions.length > 0 &&
@@ -80,7 +68,6 @@ export async function addAsset(formData, userId) {
   //Temporary userId
   userId = userId || 5;
 
-  
   // Get form data
   const newAssetData = buildAssetsData(
     formData,
@@ -88,92 +75,110 @@ export async function addAsset(formData, userId) {
     { name: instructionUrls },
     { name: invoiceUrls },
     userId,
-    "add"
+    "add",
   );
-  
+
   // Post form data
   const { data: technicalDataInput, error: technicalError } = await supabase
-  .from("hi_assets_web")
-  .insert(newAssetData);
-  
+    .from("hi_assets_web")
+    .insert(newAssetData);
+
   if (technicalError)
     handleSupabaseError(technicalError, "Inserting asset data");
 
   // Refresh the grid page
   revalidatePath("/hiassets");
-  
+
   // Navigate the user to the grid
   redirect("/hiassets");
-  
 }
 //* Asset Form */
 
 //Edit existing asset
+
 export async function editAsset(formData) {
-  // const session = await auth();
-  // if (!session) throw new Error("You must be logged in");
-
- 
-
-  
-  // Helper function to determine if a file is valid
+  // Helper: check if a new file was uploaded
   const isValidFile = (file) =>
     file && file.size > 0 && file.name !== "undefined";
-  
-  // Upload Image if it exists
-  const imageFile = formData.get("image");
-  const imageUrls = isValidFile(imageFile)
-    ? await UploadFiles([imageFile], "images")
-    : [];
-  const imageName =
-    imageUrls.length > 0
-      ? path.basename(imageUrls[0])
-      : formData.get("image_reference"); // Use the existing image reference if no new image is uploaded
 
-  // Upload Invoice if it exists
-  const invoiceFile = formData.get("invoice");
-  const invoiceUrls = isValidFile(invoiceFile)
-    ? await UploadFiles([invoiceFile], "invoices")
-    : [];
-  const invoiceName =
-    invoiceUrls.length > 0
-      ? path.basename(invoiceUrls[0])
-      : formData.get("invoice_reference"); // Use the existing invoice reference if no new invoice is uploaded
+  // -----------------------------
+  // Helper: process a single file group
+  // -----------------------------
+  async function processFile({
+    formKey,
+    referenceKey,
+    defaultUrl,
+    cloudFolder,
+  }) {
+    const newFile = formData.get(formKey);
+    const existingUrl = formData.get(referenceKey);
+    const hasNewFile = isValidFile(newFile);
 
-  // Upload Instruction if it exists
-  const instructionFile = formData.get("instructions");
-  const instructionUrls = isValidFile(instructionFile)
-    ? await UploadFiles([instructionFile], "instructions")
-    : [];
-  const instructionName =
-    instructionUrls.length > 0
-      ? path.basename(instructionUrls[0])
-      : formData.get("instructions_reference");
+    // CASE 3: No new file → keep existing
+    if (!hasNewFile) return existingUrl;
 
-  // Set the selcode
+    const isExistingDefault = existingUrl === defaultUrl;
+
+    // CASE 1: Existing is DEFAULT → upload new, no delete
+    if (isExistingDefault) {
+      const uploaded = await UploadFiles([newFile], cloudFolder);
+      return uploaded[0]; // full URL
+    }
+
+    // CASE 2: Existing is NOT default → delete old, upload new
+    await deleteCloudinaryFile(existingUrl);
+
+    const uploaded = await UploadFiles([newFile], cloudFolder);
+    return uploaded[0];
+  }
+
+  // -----------------------------
+  // Process each file group
+  // -----------------------------
+  const imageUrl = await processFile({
+    formKey: "image",
+    referenceKey: "image_reference",
+    defaultUrl: DEFAULT_IMAGE_URL,
+    cloudFolder: "ass_images",
+  });
+
+  const invoiceUrl = await processFile({
+    formKey: "invoice",
+    referenceKey: "invoice_reference",
+    defaultUrl: DEFAULT_INVOICE_URL,
+    cloudFolder: "ass_invoices",
+  });
+
+  const instructionUrl = await processFile({
+    formKey: "instructions",
+    referenceKey: "instructions_reference",
+    defaultUrl: DEFAULT_INSTRUCTION_URL,
+    cloudFolder: "ass_instructions",
+  });
+
+  // -----------------------------
+  // Build updated asset data
+  // -----------------------------
   const selcode = formData.get("selcode");
 
-  // Get form data
-
-  // Get form data
-  const newAssetData = buildAssetsData(
+  const updatedAssetData = buildAssetsData(
     formData,
-    { name: imageName },
-    { name: instructionName },
-    { name: invoiceName },
-    session.user.appUserId,
-    "edit"
+    { name: [imageUrl] },
+    { name: [instructionUrl] },
+    { name: [invoiceUrl] },
+    5, // or session.user.appUserId when auth is enabled
+    "edit",
   );
 
-  //Post form data
-
-  const { data: FinancialDataEdit, error: financialError } = await supabase
+  // -----------------------------
+  // Update Supabase
+  // -----------------------------
+  const { data, error } = await supabase
     .from("hi_assets_web")
-    .update(newAssetData)
+    .update(updatedAssetData)
     .eq("selcode", selcode);
 
-  if (financialError)
-    handleSupabaseError(financialError, "Updating asset data");
+  if (error) handleSupabaseError(error, "Updating asset data");
 
   revalidatePath("/hiassets");
   redirect("/hiassets");
