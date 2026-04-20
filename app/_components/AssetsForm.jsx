@@ -1,8 +1,8 @@
-import { useState, useEffect } from "react";
-import { format } from "date-fns";
-import { addAsset, editAsset } from "@/app/_lib/data-service";
+import { addAssetAction, editAssetAction } from "@/app/_lib/actions";
 import ShortUrlDisplay from "@/app/_lib/short_url";
+import { format } from "date-fns";
 import Image from "next/image";
+import { useEffect, useState } from "react";
 
 const AssetsForm = ({ equipment, categories, locations, edit }) => {
   const [urls, setUrls] = useState({
@@ -10,9 +10,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
     invoice: "",
     instructions: "",
   });
-
-  console.log("Asset Form Data:", equipment);
-
+  
   const formatNumber = (value) => {
     return new Intl.NumberFormat("en-US", {
       minimumFractionDigits: 2,
@@ -24,15 +22,6 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
 
   useEffect(() => {
     if (edit && equipment) {
-      // setUrls({
-      //   image: asset.card_image ? `${asset.card_image}` : "",
-      //   invoice: asset.finance_purchase_invoice
-      //     ? `${asset.finance_purchase_invoice}`
-      //     : "",
-      //   instructions: asset.technical_instructions
-      //     ? `${asset.technical_instructions}`
-      //     : "",
-      // });
       setUrls({
         image: asset?.card_image ?? "",
         invoice: asset?.finance_purchase_invoice ?? "",
@@ -140,7 +129,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
           </div>
           <form
             className="px-8 pb-6"
-            action={edit ? editAsset : addAsset}
+            action={edit ? editAssetAction : addAssetAction}
             method="POST"
             encType="multipart/form-data"
           >
@@ -315,7 +304,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                     edit
                       ? format(
                           new Date(formData.finance_purchase_date),
-                          "yyyy-MM-dd"
+                          "yyyy-MM-dd",
                         )
                       : formData.finance_purchase_date
                   }
@@ -439,7 +428,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
                   id="finance_disposal_date"
                   value={format(
                     new Date(formData.finance_disposal_date),
-                    "yyyy-MM-dd"
+                    "yyyy-MM-dd",
                   )}
                   onChange={handleInputChange}
                   className="w-full rounded-md border border-primary-200 bg-primary-100 py-2.5 px-6 text-base font-medium text-primary-900 focus:ring focus:ring-opacity-50 disabled:opacity-50"

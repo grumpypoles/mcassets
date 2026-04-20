@@ -9,8 +9,6 @@ import { notFound } from "next/navigation";
 import path from "path";
 import { supabase } from "./supabase";
 import { deleteCloudinaryFile } from "./deleteCloudinaryFiles";
-// //For Testing
-// await new Promise((res)=> setTimeout(res, 3000))
 
 // Error function
 function handleSupabaseError(error, operation) {
@@ -18,22 +16,27 @@ function handleSupabaseError(error, operation) {
   throw new Error(`${operation} failed. Please try again later.`);
 }
 const DEFAULT_IMAGE_URL = [
-  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856489/AssetImageMissing_grnv21.webp",
+  `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1744856489/AssetImageMissing_grnv21.webp`,
 ];
 
 const DEFAULT_INVOICE_URL = [
-  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf",
+  `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1744857211/0000_Missing_Invoice_o2rk5e.pdf`,
 ];
 
 const DEFAULT_INSTRUCTION_URL = [
-  "https://res.cloudinary.com/dvmnwyia5/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf",
+  `https://res.cloudinary.com/${process.env.CLOUDINARY_CLOUD_NAME}/image/upload/v1744856593/0000_No_Instructions_qlrtx8.pdf`,
 ];
 
 //* Asset Form */
 
 //Add new asset
 
-export async function addAsset(formData, userId) {
+export async function addAsset(formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  const userId = session.user.appUserId;
+
   // Upload Images
   const images = formData.getAll("image");
 
@@ -65,9 +68,6 @@ export async function addAsset(formData, userId) {
     ? await UploadFiles(instructions, "ass_instructions")
     : DEFAULT_INSTRUCTION_URL;
 
-  //Temporary userId
-  userId = userId || 5;
-
   // Get form data
   const newAssetData = buildAssetsData(
     formData,
@@ -97,6 +97,10 @@ export async function addAsset(formData, userId) {
 //Edit existing asset
 
 export async function editAsset(formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  const userId = session.user.appUserId;
   // Helper: check if a new file was uploaded
   const isValidFile = (file) =>
     file && file.size > 0 && file.name !== "undefined";
@@ -166,7 +170,7 @@ export async function editAsset(formData) {
     { name: [imageUrl] },
     { name: [instructionUrl] },
     { name: [invoiceUrl] },
-    5, // or session.user.appUserId when auth is enabled
+    userId,
     "edit",
   );
 

@@ -1,7 +1,9 @@
 "use server";
 
 import { auth, signIn, signOut } from "@/app/_lib/auth";
-import { addAsset as addAssetInternal } from "@/app/_lib/data-service";
+import { addAsset as addAssetInternal, editAsset as editAssetInternal } from "@/app/_lib/data-service";
+import { supabase } from "@/app/_lib/supabase";
+import { revalidatePath } from "next/cache";
 
 // Add Asset (wrapper server action)
 export async function addAssetAction(formData) {
@@ -10,6 +12,14 @@ export async function addAssetAction(formData) {
 
   const userId = session.user.appUserId;
   return await addAssetInternal(formData, userId);
+}
+
+// Edit Asset (wrapper server action)
+export async function editAssetAction(formData) {
+  const session = await auth();
+  if (!session) throw new Error("You must be logged in");
+
+  return await editAssetInternal(formData);
 }
 
 // Sign in with Google
@@ -42,5 +52,3 @@ export async function updateProfileAction(formData) {
 
   revalidatePath("/account/profile");
 }
-
-
