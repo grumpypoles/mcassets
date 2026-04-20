@@ -185,7 +185,6 @@ mcassets/
 │   │   ├── auth.js         # NextAuth configuration
 │   │   ├── cloudinary.js   # Cloudinary SDK instance
 │   │   ├── data-service.js # Supabase data access + server actions
-│   │   ├── delete_item.js  # Asset deletion logic
 │   │   ├── helpers.js      # Form data builder + date utilities
 │   │   ├── statistics.js   # Reporting data queries
 │   │   ├── supabase.js     # Supabase client
@@ -249,5 +248,4 @@ The easiest way to deploy is via [Vercel](https://vercel.com/):
 
 - Input validation (Zod) not yet implemented on server actions
 - No automated tests
-- `delete_item.js` needs to be refactored before use
 - Cloudinary cloud name is partially hardcoded in default URL constants
