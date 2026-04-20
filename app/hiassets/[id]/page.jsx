@@ -1,16 +1,13 @@
 "use client";
 
+import AssetsDashboard from "@/app/_components/AssetsDashboard";
+import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
+import Link from "next/link";
 import { useParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
-import Link from "next/link";
-import { ArrowLongLeftIcon, TrashIcon } from "@heroicons/react/24/solid";
-import AssetsDashboard from "@/app/_components/AssetsDashboard";
-import delete_item from "@/app/_lib/delete_item";
 
 import Spinner from "@/app/_components/Spinner";
-// import delete_item from "@/app/_lib/delete_item";
 import { getAssetsList } from "@/app/_lib/data-service";
-import { revalidatePath } from "next/cache";
 
 const Page = () => {
   const { id } = useParams(); // Ensure the parameter name matches your route
@@ -45,21 +42,7 @@ const Page = () => {
   if (!equipmentData) return <h1 className="mt-10 text-2xl font-bold text-center">Equipment Data Not Found</h1>;
 
 
-  const handleDelete = () => {
-    // if (confirm("Are you sure you want to delete this record?")) {
-    //   startTransition(async () => {
-    //     try {
-    //       await delete_item(equipmentData);
-    //       alert("Item deleted successfully!");
-    //       revalidatePath("/hiassets");
-    //     } catch (error) {
-    //       alert("Error deleting item. Please try again.");
-    //     }
-    //   });
-    // }
-  };
-
-  return (
+    return (
     <>
       <div className="flex flex-row justify-between mb-2">
         <Link href="/hiassets" className="flex items-center text-2xl font-semibold text-primary-300">
