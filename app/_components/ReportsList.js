@@ -8,7 +8,7 @@ async function ReportsList() {
   const assetsData = await getAssetsReport();
 
   return (
-    console.log("assetsData", assetsData),
+    //console.log("assetsData", assetsData),
     (
       <div>
         {assetsData.length === 0 ? (

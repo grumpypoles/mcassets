@@ -21,14 +21,14 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
   const asset = edit && equipment ? equipment[0] : null;
 
   useEffect(() => {
-    if (edit && equipment) {
-      setUrls({
-        image: asset?.card_image ?? "",
-        invoice: asset?.finance_purchase_invoice ?? "",
-        instructions: asset?.technical_instructions ?? "",
-      });
-    }
-  }, [edit, equipment]);
+  if (edit && equipment) {
+    setUrls({
+      image: asset?.card_image ?? "",
+      invoice: asset?.finance_purchase_invoice ?? "",
+      instructions: asset?.technical_instructions ?? "",
+    });
+  }
+}, [edit, equipment, asset?.card_image, asset?.finance_purchase_invoice, asset?.technical_instructions]);
 
   const initialFormData =
     edit && equipment

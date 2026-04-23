@@ -15,7 +15,7 @@ const Page = () => {
   const [loading, setLoading] = useState(true);
   const [isPending, startTransition] = useTransition();
 
-  console.log("Route Parameters:", { id });
+  //console.log("Route Parameters:", { id });
 
   useEffect(() => {
     if (!id) {
