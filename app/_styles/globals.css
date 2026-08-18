@@ -1,7 +1,23 @@
+/* Syncfusion imports FIRST - before everything else */
+@import '../../node_modules/@syncfusion/ej2-base/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-buttons/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-grids/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-inputs/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-lists/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-navigations/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-popups/styles/tailwind-dark.css';
+@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind-dark.css";
+@import '../../node_modules/@syncfusion/ej2-calendars/styles/tailwind-dark.css';
+@import '../../node_modules/@syncfusion/ej2-react-pivotview/styles/tailwind-dark.css';
 
+
+/* Tailwind directives after */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
 
 
 @layer components {
@@ -41,27 +57,3 @@
 }
 
 
-/* 
-@import '../../node_modules/@syncfusion/ej2-base/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-grids/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-inputs/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-lists/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/material.css';
-@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/material.css";
-@import '../../node_modules/@syncfusion/ej2-calendars/styles/material.css';
-@import '../../node_modules/@syncfusion/ej2-react-pivotview/styles/material.css'; */
-
-@import '../../node_modules/@syncfusion/ej2-base/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-buttons/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-dropdowns/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-grids/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-inputs/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-lists/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-navigations/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-popups/styles/tailwind-dark.css';
-@import "../../node_modules/@syncfusion/ej2-splitbuttons/styles/tailwind-dark.css";
-@import '../../node_modules/@syncfusion/ej2-calendars/styles/tailwind-dark.css';
-@import '../../node_modules/@syncfusion/ej2-react-pivotview/styles/tailwind-dark.css';

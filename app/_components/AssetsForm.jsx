@@ -130,8 +130,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
           <form
             className="px-8 pb-6"
             action={edit ? editAssetAction : addAssetAction}
-            method="POST"
-            encType="multipart/form-data"
+            
           >
             <div className="grid grid-cols-12 gap-2 pt-4 mb-5">
               <div>
@@ -581,7 +580,7 @@ const AssetsForm = ({ equipment, categories, locations, edit }) => {
       {edit && urls.image.length > 0 && (
         <div className="flex flex-row p-6 px-12 py-8 justify-evenly space-x-7 max-h-96 bg-primary-800">
           <Image
-            src={urls.image}
+            src={urls.image[0]}
             name="image_reference"
             alt="Asset Image"
             height={0}

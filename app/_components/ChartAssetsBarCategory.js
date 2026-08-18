@@ -1,8 +1,7 @@
 "use client";
 
 import { AgCharts } from "ag-charts-react";
-import "ag-grid-community/styles/ag-grid.css";
-import "ag-grid-community/styles/ag-theme-quartz.css";
+import { themeQuartz, colorSchemeDarkBlue } from "ag-grid-community";
 
 function ChartAssetsBarCategory({ rowData }) {
  
