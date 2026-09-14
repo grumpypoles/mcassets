@@ -64,3 +64,32 @@ export async function getAssetsReport() {
 
   return filteredData;
 }
+
+
+export async function getInsuranceReport() {
+  const { data, error } = await supabase
+    .from("hi_assets_web")
+    .select(
+      `
+      id,
+      card_description,
+      technical_maker_name,
+      card_model,
+      technical_model_number,
+      technical_serial_number,
+      finance_purchase_date,
+      finance_purchase_amount,
+      finance_purchase_location,
+      status
+    `
+    )
+    .order("card_description", { ascending: true })
+    .limit(5000);
+
+  if (error) {
+    console.error(error);
+    notFound();
+  }
+
+  return data;
+}

@@ -28,9 +28,14 @@ export default async function NavLogin() {
                 Reporting
               </Link>
             </li>
-            {/* <li className="flex items-center">
-              <NavDropDown />
-            </li> */}
+            <li>
+              <Link
+                href="/insurance"
+                className="px-3 py-2 transition-colors hover:bg-primary-700"
+              >
+                Insurance
+              </Link>
+            </li>
             <li>
               <Link
                 href="/account"
